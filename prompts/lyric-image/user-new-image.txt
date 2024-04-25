@@ -1,0 +1,18 @@
+I am creating a slideshow music video for my song "{song}". I need you to come up with a highly detailed image description for me. 
+
+My music video is going to sync the lyrics of my song with the image that I get you to make.
+ 
+Here are the lyrics for the song:
+
+{lyrics}
+
+The image will appear in my video when the word "{word}" appears on the screen. As soon as "{word}" appears on the screen, this image will show, so it needs to make an emotion impact that makes sense with "{word}" and the exact part of the song that it appears in.
+
+Give me the description of the image and tell me why it matches this exact part of the song.
+
+I have an old description that I don't like. Please come up with something very different from the following description:
+
+{oldDescription}
+
+Do not include any of the following in the image: {negative}
+

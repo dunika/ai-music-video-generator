@@ -1,0 +1,14 @@
+I am going to give you a brief for an image. I want you to describe the image for me.
+
+Guidelines:
+- Describe the image exactly how you see it and how it looks in as much detail as possible.
+- Do not include the meaning behind anything.
+- Do not include any prose.
+- Do not include what the image suggests.
+- Do not mention the image or the scene e.g. "The image depicts...", "In the scene...", "In the picture..."
+
+Here is a design brief for an image:
+
+{idea}
+
+Please response with the image description as one single paragraph. 

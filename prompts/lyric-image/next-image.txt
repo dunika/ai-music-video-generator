@@ -1,0 +1,8 @@
+Thanks. Now, I need you to come up with another highly detailed image description for me. 
+
+This image will appear in my video when the words "{word}" are heard for the {wordCount} time.
+
+Give me the description of the image and tell me why it matches this exact part of the song.
+
+Think outside the box and come up with a new novel concept.
+

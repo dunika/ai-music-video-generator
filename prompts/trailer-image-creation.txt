@@ -1,0 +1,8 @@
+I need you to create me an image from a description I have. The artistic style of the image needs to be {style}.
+
+Here is the description:
+
+{imageDescription}
+
+
+

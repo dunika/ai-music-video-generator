@@ -1,0 +1,15 @@
+I am creating a slideshow music video for my song {song}. 
+
+I need you to make me an image that I can use in this video. 
+
+The orientation of the image needs to be Portrait. Do not make the image a Landscape image on its side.
+
+The artistic style of the image is {style}.
+
+Here are the lyrics for the song:
+
+{lyrics}
+
+Do not add the lyrics to the image.
+
+The image appears when the words "{word}" are heard for the {wordCount} time, so the image has to match with that part of the song. The image should be unique for that part of the song. Look at the words around "{word}" in the lyrics and make sure the image matches the context.

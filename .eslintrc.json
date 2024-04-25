@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "extends": ["next/core-web-vitals", "../eslint/react"],
+  "plugins": ["@remotion"],
+  "overrides": [
+    {
+      "files": ["remotion/**/*.{ts,tsx}"],
+      "extends": ["plugin:@remotion/recommended"]
+    }
+  ]
+}

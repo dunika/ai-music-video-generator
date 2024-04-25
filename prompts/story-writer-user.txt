@@ -1,0 +1,7 @@
+I want you to write a story for my song. The name of the song is {song}. The story should be written in a {mood} style. 
+
+The key words in the song are: {imageWords}
+
+Please find the lyrics to the song below:
+
+{lyrics}
