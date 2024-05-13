@@ -1,16 +1,32 @@
-import { set } from 'lodash'
+'use client'
+
 import { NextPage } from 'next/types'
 import React, {
   useEffect,
   useReducer,
+  useRef,
   useState,
 } from 'react'
+import { useAudioRecorder as useAudioRecorderold } from 'react-audio-voice-recorder'
 import { useAudioPlayer } from 'react-use-audio-player'
-import { useAudioRecorder } from 'react-use-audio-recorder'
 import useEvent from 'react-use-event-hook'
-import * as Tone from 'tone'
+import useAudioRecorder from './useAudioRecorder'
 
-// TODO: decibel meter
+const downloadBlob = (blob: Blob, filename: string) => {
+  const url = window.URL.createObjectURL(blob)
+
+  const a = document.createElement('a')
+
+  a.href = url
+  a.download = filename || 'download'
+
+  document.body.appendChild(a)
+
+  a.click()
+
+  document.body.removeChild(a)
+  window.URL.revokeObjectURL(url)
+}
 
 const actions = {
   start: 'start',
@@ -53,31 +69,6 @@ const useRecordingStatus = () => {
   }, initialState)
 }
 
-const useDecibelMeter = () => {
-  const [decibels, setDecibels] = useState<number>(0)
-
-  useEffect(() => {
-    const meter = new Tone.Meter()
-    const mic = new Tone.UserMedia()
-    mic.open()
-    mic.connect(meter)
-
-    const timer = setInterval(() => {
-      let value = meter.getValue()
-      value = Array.isArray(value) ? value : [value]
-      value = value.reduce((acc, val) => Math.max(acc, val), 0)
-      setDecibels(value)
-    }, 100)
-
-    return () => {
-      clearInterval(timer)
-      mic.close()
-    }
-  }, [])
-
-  return decibels
-}
-
 const useOverdub = ({
   audioFile,
   onFinishedRecording,
@@ -87,6 +78,7 @@ const useOverdub = ({
     play: playAudio,
     stop: stopAudio,
     togglePlayPause: togglePlayPauseAudio,
+    cleanup: cleanupAudio,
   } = useAudioPlayer()
 
   const {
@@ -94,17 +86,19 @@ const useOverdub = ({
     stopRecording,
     togglePauseResume: togglePlayPauseRecording,
     recordingBlob,
-  } = useAudioRecorder()
+  } = useAudioRecorderold()
 
   const [status, dispatchStatusAction] = useRecordingStatus()
 
   useEffect(() => {
     dispatchStatusAction({ type: actions.initialize })
-    stopAudio()
+    if (audioFile) {
+      loadAudio(audioFile, {
+        autoplay: false,
+      })
+    }
+    cleanupAudio()
     stopRecording()
-    loadAudio(audioFile, {
-      autoplay: false,
-    })
   }, [audioFile, loadAudio])
 
   const { finished } = status
@@ -140,16 +134,76 @@ const useOverdub = ({
   }
 }
 
+// const useDecibelMeter = () => {
+//   const [decibels, setDecibels] = useState<number>(0)
+
+//   window.lad = lad
+
+//   useEffect(() => {
+//     debugger
+//     const meter = new MeterGet()
+//     const mic = new UserMedia()
+//     mic.open()
+//     mic.connect(meter)
+
+//     const timer = setInterval(() => {
+//       let value = meter.getValue()
+//       value = Array.isArray(value) ? value : [value]
+//       value = value.reduce((acc, val) => Math.max(acc, val), 0)
+//       setDecibels(value)
+//     }, 100)
+
+//     return () => {
+//       clearInterval(timer)
+//       mic.close()
+//     }
+//   }, [])
+
+//   return decibels
+// }
+
 const Overdub: NextPage = () => {
   const [file, setFile] = useState(null)
 
+  const {
+    status,
+    start,
+    stop,
+    pause,
+  } = useOverdub({
+    audioFile: file,
+    onFinishedRecording: (blob) => {
+      console.log(blob)
+      //  download
+      downloadBlob(blob, 'recording.wav')
+    },
+  })
+
+  const container = useRef(null)
+
+  const lad = useAudioRecorder(container.current)
+
+  window.lad = lad
+
+  // const decibels = useMicrophoneDecibels()
+
   if (!file) {
     return (
-      <div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <input type="file" onChange={(e) => setFile(e.target.files[0])} placeholder="Upload your audio file" />
       </div>
     )
   }
 
-  return null
+  return (
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <button onClick={start}>Start</button>
+      <button onClick={stop}>Stop</button>
+      <button onClick={pause}>{status.paused ? 'Resume' : 'Pause'}</button>
+      {/* <div>{decibels}</div> */}
+      <div ref={container} />
+    </div>
+  )
 }
+
+export default Overdub

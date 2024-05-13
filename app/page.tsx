@@ -149,7 +149,7 @@ const RenderVideo: React.FC<{
   return (
     <button
       type="button"
-      className={` mb-4 ${styles.button}`}
+      className={`mb-4 ${styles.button}`}
       onClick={() => {
         fetch('http://localhost:3000/api/videos/render', {
           method: 'POST',

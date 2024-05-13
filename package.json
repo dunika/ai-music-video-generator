@@ -42,7 +42,9 @@
     "string-template": "^1.0.0",
     "tone": "^14.9.17",
     "unstated-next": "^1.1.0",
-    "use-remotion-player": "^0.0.2"
+    "use-remotion-player": "^0.0.2",
+    "wavesurfer-react": "^3.0.2",
+    "wavesurfer.js": "^7.7.14"
   },
   "devDependencies": {
     "@types/node": "^20",
