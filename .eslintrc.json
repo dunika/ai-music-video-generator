@@ -7,5 +7,8 @@
       "files": ["remotion/**/*.{ts,tsx}"],
       "extends": ["plugin:@remotion/recommended"]
     }
-  ]
+  ], 
+  "rules": {
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+  }
 }
