@@ -2,11 +2,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-
-const fetchAvailableAudioDevices = async () => {
-  const devices = await navigator.mediaDevices.enumerateDevices()
-  return devices.filter((device) => device.kind === 'audioinput')
-}
+import { fetchAvailableAudioDevices } from './mediaDevices'
 
 const useAvailableAudioDevices = () => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
