@@ -4,10 +4,28 @@ import {
 } from 'react'
 import { fetchAvailableAudioDevices } from './mediaDevices'
 
-const useAvailableAudioDevices = () => {
+type UseAvailableAudioDevices = {
+  devices: MediaDeviceInfo[],
+  error: Error | null
+}
+
+const useAvailableAudioDevices = (): UseAvailableAudioDevices => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
+  const [error, setError] = useState<Error | null>()
+
   useEffect(() => {
-    const updateAudioDevices = () => fetchAvailableAudioDevices().then(setDevices)
+    const updateAudioDevices = async () => {
+      setError(null)
+
+      try {
+        const nextDevices = await fetchAvailableAudioDevices()
+        setDevices(nextDevices)
+      } catch (nextError) {
+        setError(nextError)
+      }
+    }
+
+    updateAudioDevices()
 
     navigator.mediaDevices.addEventListener('devicechange', updateAudioDevices)
 
@@ -16,7 +34,10 @@ const useAvailableAudioDevices = () => {
     }
   }, [])
 
-  return devices
+  return {
+    devices,
+    error,
+  }
 }
 
 export default useAvailableAudioDevices
