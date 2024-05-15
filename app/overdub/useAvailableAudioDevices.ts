@@ -2,7 +2,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { fetchAvailableAudioDevices } from './mediaDevices'
+import { fetchAvailableAudioDevices } from './mediaStreamUtils'
 
 type UseAvailableAudioDevices = {
   devices: MediaDeviceInfo[],
@@ -11,7 +11,7 @@ type UseAvailableAudioDevices = {
 
 const useAvailableAudioDevices = (): UseAvailableAudioDevices => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
-  const [error, setError] = useState<Error | null>()
+  const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     const updateAudioDevices = async () => {
@@ -21,7 +21,7 @@ const useAvailableAudioDevices = (): UseAvailableAudioDevices => {
         const nextDevices = await fetchAvailableAudioDevices()
         setDevices(nextDevices)
       } catch (nextError) {
-        setError(nextError)
+        setError(nextError as Error)
       }
     }
 
