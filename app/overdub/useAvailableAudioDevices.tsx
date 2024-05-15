@@ -2,21 +2,21 @@ import {
   useEffect,
   useState,
 } from 'react'
-import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js'
+
+const fetchAvailableAudioDevices = async () => {
+  const devices = await navigator.mediaDevices.enumerateDevices()
+  return devices.filter((device) => device.kind === 'audioinput')
+}
 
 const useAvailableAudioDevices = () => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
   useEffect(() => {
-    const getAvailableAudioDevices = () => {
-      RecordPlugin.getAvailableAudioDevices().then(setDevices)
-    }
+    const updateAudioDevices = () => fetchAvailableAudioDevices().then(setDevices)
 
-    getAvailableAudioDevices()
-
-    navigator.mediaDevices.addEventListener('devicechange', getAvailableAudioDevices)
+    navigator.mediaDevices.addEventListener('devicechange', updateAudioDevices)
 
     return () => {
-      navigator.mediaDevices.removeEventListener('devicechange', getAvailableAudioDevices)
+      navigator.mediaDevices.removeEventListener('devicechange', updateAudioDevices)
     }
   }, [])
 
