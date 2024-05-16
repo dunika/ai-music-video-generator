@@ -1,9 +1,12 @@
-export const fetchMediaStream = (deviceId: string): Promise<MediaStream> => {
-  return navigator.mediaDevices.getUserMedia({ audio: { deviceId } })
-}
-
 export const fetchDefaultMediaStream = (): Promise<MediaStream> => {
   return navigator.mediaDevices.getUserMedia({ audio: true })
+}
+
+export const fetchMediaStream = (deviceId?: string): Promise<MediaStream> => {
+  if (!deviceId) {
+    return fetchDefaultMediaStream()
+  }
+  return navigator.mediaDevices.getUserMedia({ audio: { deviceId } })
 }
 
 export const fetchAvailableAudioDevices = async (): Promise<MediaDeviceInfo[]> => {
