@@ -8,15 +8,34 @@ import useEvent from 'react-use-event-hook'
 
 type RecordingState = 'inactive' | 'paused' | 'recording';
 
-const useMediaRecorder = (
-  stream: MediaStream,
-) => {
+export type MediaStreamRecorder = {
+  blob: Blob[]
+  start: () => void
+  stop: () => void
+  pause: () => void
+  resume: () => void
+  state: RecordingState
+}
+
+type UseMediaStreamRecorder = {
+  recorder: MediaStreamRecorder
+  error: Error | null
+}
+
+const useMediaStreamRecorder = (
+  stream?: MediaStream | null,
+): UseMediaStreamRecorder => {
   const mediaRecorder = useRef<MediaRecorder | null>(null)
   const [recordingBlob, setRecordingBlob] = useState<Blob[]>([])
   const [recordingState, setRecordingState] = useState<RecordingState>('inactive')
   const [error, setError] = useState<Error | null>(null)
 
   const initializeMediaRecorder = useCallback(() => {
+    if (!stream) {
+      setError(new Error('No media stream provided'))
+      return
+    }
+
     setError(null)
     setRecordingBlob([])
 
@@ -45,7 +64,7 @@ const useMediaRecorder = (
     }
   }, [stream])
 
-  const startRecording = useEvent(() => {
+  const start = useEvent(() => {
     if (recordingState !== 'inactive') {
       return
     }
@@ -53,36 +72,40 @@ const useMediaRecorder = (
     mediaRecorder.current?.start()
   })
 
-  const stopRecording = useEvent(() => {
+  const stop = useEvent(() => {
     if (!error && recordingState === 'inactive') {
       return
     }
     mediaRecorder.current?.stop()
   })
 
-  const pauseRecording = useEvent(() => {
+  const pause = useEvent(() => {
     if (!error && recordingState !== 'recording') {
       return
     }
     mediaRecorder.current?.pause()
   })
 
-  const resumeRecording = useEvent(() => {
+  const resume = useEvent(() => {
     if (!error && recordingState !== 'paused') {
       return
     }
     mediaRecorder.current?.resume()
   })
 
+  const recorder = {
+    start,
+    stop,
+    pause,
+    resume,
+    blob: recordingBlob,
+    state: recordingState,
+  }
+
   return {
-    recordingBlob,
-    startRecording,
-    stopRecording,
-    pauseRecording,
-    resumeRecording,
-    recordingState,
-    recordingError: error,
+    recorder,
+    error,
   }
 }
 
-export default useMediaRecorder
+export default useMediaStreamRecorder

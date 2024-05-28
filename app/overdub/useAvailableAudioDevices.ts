@@ -2,7 +2,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { fetchAvailableAudioDevices } from './mediaStreamUtils'
+import { fetchAvailableAudioDevices } from './mediaUtils'
 
 type UseAvailableAudioDevices = {
   devices: MediaDeviceInfo[],

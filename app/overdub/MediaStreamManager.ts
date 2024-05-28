@@ -3,7 +3,7 @@ import {
   fetchMediaStream,
   getMediaStreamDeviceId,
   stopMediaStream,
-} from './mediaStreamUtils'
+} from './mediaUtils'
 
 const INITIAL_DEFAULT_DEVICE_KEY = 'default'
 
