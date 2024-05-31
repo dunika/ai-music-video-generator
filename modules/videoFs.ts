@@ -11,7 +11,9 @@ import {
   getLyricsTxtPath,
   getStorybookImagePath,
   getStorybookPath,
+  getSubtitleAudioFilePath,
   getSubtitlesFilePath,
+  getVideoDir,
 } from './videoFsPath'
 import { retry } from './async'
 
@@ -47,9 +49,24 @@ export const getLyricsTxt = async (videoName: string): Promise<string> => {
   return txt
 }
 
+export const makeVideoDir = async (name: string) => {
+  const videoDir = getVideoDir(name)
+  await fs.mkdir(videoDir, { recursive: true })
+}
+
 export const writeSubtitlesToFile = async (segmentSubtitles: Video) => {
   const subtitlesFilePath = getSubtitlesFilePath(segmentSubtitles.name)
   await fs.writeFile(subtitlesFilePath, JSON.stringify(segmentSubtitles.subtitles, null, 2))
+}
+
+export const writeLyricsTxtToFile = async (name: string, lyrics: string) => {
+  const lyricsFilePath = getLyricsTxtPath(name)
+  await fs.writeFile(lyricsFilePath, lyrics)
+}
+
+export const writeSubtitleAudioToFile = async (name: string, file: Buffer, extension: string) => {
+  const subtitlesFilePath = getSubtitleAudioFilePath(name, extension)
+  await fs.writeFile(subtitlesFilePath, file)
 }
 
 export const getStorybookJson = async (

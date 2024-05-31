@@ -1,21 +1,23 @@
 import { Style } from '@/types/enums'
 
-export const getSongRoot = (videoName: string) => `./public/songs/${videoName}`
+export const getVideoDir = (videoName: string) => `./public/songs/${videoName}`
 
-export const getVideoFilePath = (videoName: string) => `${getSongRoot(videoName)}/video.mov`
+export const getVideoFilePath = (videoName: string) => `${getVideoDir(videoName)}/video.mov`
 
-export const getAudioFilePath = (videoName: string) => `${getSongRoot(videoName)}/audio.wav`
+export const getAudioFilePath = (videoName: string) => `${getVideoDir(videoName)}/audio.wav`
 
-export const getSubtitlesFilePath = (videoName: string) => `${getSongRoot(videoName)}/subtitles.json`
+export const getSubtitlesFilePath = (videoName: string) => `${getVideoDir(videoName)}/subtitles.json`
 
-export const getLyricsTxtPath = (videoName: string) => `${getSongRoot(videoName)}/lyrics.txt`
+export const getSubtitleAudioFilePath = (videoName: string, extension: string) => `${getVideoDir(videoName)}/subtitle_audio.${extension}`
 
-export const getStorybookPath = (videoName: string) => `${getSongRoot(videoName)}/storybook.json`
+export const getLyricsTxtPath = (videoName: string) => `${getVideoDir(videoName)}/lyrics.txt`
+
+export const getStorybookPath = (videoName: string) => `${getVideoDir(videoName)}/storybook.json`
 
 export const getStorybookRoot = (
   videoName: string,
 ) => {
-  return `${getSongRoot(videoName)}/storybooks`
+  return `${getVideoDir(videoName)}/storybooks`
 }
 
 export const getStorybookImageDir = (

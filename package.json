@@ -10,6 +10,7 @@
     "start-video": "remotion preview ./remotion/index.tsx"
   },
   "dependencies": {
+    "@deepgram/sdk": "^3.3.3",
     "@remotion/bundler": "4.0.74",
     "@remotion/cli": "4.0.74",
     "@remotion/eslint-plugin": "4.0.74",
@@ -25,6 +26,7 @@
     "@tanstack/react-query": "^5.17.19",
     "eslint-config-dunika": "0.0.0",
     "execa": "^8.0.1",
+    "filenamify": "^6.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "lodash": "^4.17.21",
     "next": "14.0.3",
