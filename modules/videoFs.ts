@@ -2,7 +2,7 @@ import { promises as fs } from 'fs'
 import {
   Video,
   StorybookPage,
-  Subtitle,
+  Caption,
 } from '@/types'
 import {
   Style,
@@ -11,9 +11,10 @@ import {
   getLyricsTxtPath,
   getStorybookImagePath,
   getStorybookPath,
-  getSubtitleAudioFilePath,
-  getSubtitlesFilePath,
+  getCaptionAudioFilePath,
+  getCaptionsFilePath,
   getVideoDir,
+  getMediaFilePath,
 } from './videoFsPath'
 import { retry } from './async'
 
@@ -35,17 +36,17 @@ const downloadImage = async (url: string, destinationPath: string) => {
   })
 }
 
-export const getSubtitlesJson = async (videoName: string): Promise<Subtitle[]> => {
-  const subtitlesFilePath = getSubtitlesFilePath(videoName)
-  const json = await fs.readFile(subtitlesFilePath, 'utf8')
+export const getCaptionsJson = async (videoName: string): Promise<Caption[]> => {
+  const captionsFilePath = getCaptionsFilePath(videoName)
+  const json = await fs.readFile(captionsFilePath, 'utf8')
   return JSON.parse(json)
 }
 
 export const getLyricsTxt = async (videoName: string): Promise<string> => {
-  const subs = await getSubtitlesJson(videoName)
+  const subs = await getCaptionsJson(videoName)
   return subs.map((sub) => sub.text).join(' ')
-  const subtitlesFilePath = getLyricsTxtPath(videoName)
-  const txt = await fs.readFile(subtitlesFilePath, 'utf8')
+  const captionsFilePath = getLyricsTxtPath(videoName)
+  const txt = await fs.readFile(captionsFilePath, 'utf8')
   return txt
 }
 
@@ -54,9 +55,9 @@ export const makeVideoDir = async (name: string) => {
   await fs.mkdir(videoDir, { recursive: true })
 }
 
-export const writeSubtitlesToFile = async (segmentSubtitles: Video) => {
-  const subtitlesFilePath = getSubtitlesFilePath(segmentSubtitles.name)
-  await fs.writeFile(subtitlesFilePath, JSON.stringify(segmentSubtitles.subtitles, null, 2))
+export const writeCaptionsToFile = async (segmentCaptions: Video) => {
+  const captionsFilePath = getCaptionsFilePath(segmentCaptions.name)
+  await fs.writeFile(captionsFilePath, JSON.stringify(segmentCaptions.captions, null, 2))
 }
 
 export const writeLyricsTxtToFile = async (name: string, lyrics: string) => {
@@ -64,9 +65,9 @@ export const writeLyricsTxtToFile = async (name: string, lyrics: string) => {
   await fs.writeFile(lyricsFilePath, lyrics)
 }
 
-export const writeSubtitleAudioToFile = async (name: string, file: Buffer, extension: string) => {
-  const subtitlesFilePath = getSubtitleAudioFilePath(name, extension)
-  await fs.writeFile(subtitlesFilePath, file)
+export const writeCaptionAudioToFile = async (name: string, file: Buffer, extension: string) => {
+  const captionsFilePath = getCaptionAudioFilePath(name, extension)
+  await fs.writeFile(captionsFilePath, file)
 }
 
 export const getStorybookJson = async (
@@ -89,22 +90,28 @@ export const writeStorybookImageToFile = async (
   imageUrl: string,
   style: Style,
   videoName: string,
-  subtitleIndex: number,
+  captionIndex: number,
   imageIndex: number,
   version: string = '',
 ) => {
   const storybookImagePath = getStorybookImagePath(
     videoName,
     style,
-    subtitleIndex,
+    captionIndex,
     imageIndex,
     version,
   )
   await downloadImage(imageUrl, storybookImagePath)
 }
 
+export const writeMediaBuffer =  async (videoName: string, buffer: Buffer, mediaType: 'audio' | 'video', extension: string ) => {
+  const filePath = await getMediaFilePath(videoName, mediaType, extension)
+  await fs.writeFile(filePath, buffer)
+}
+  
+
 export default {
-  writeSubtitlesToFile,
+  writeCaptionsToFile,
   writeStorybookToFile,
   writeStorybookImageToFile,
 }

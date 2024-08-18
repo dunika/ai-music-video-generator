@@ -1,9 +1,9 @@
 import type {
   Video,
-  Subtitle,
+  Caption,
 } from '@/types'
 
-import { getSubtitlesFilePath } from '@/modules/videoFsPath'
+import { getCaptionsFilePath } from '@/modules/videoFsPath'
 import { promises as fs } from 'fs'
 
 import * as path from 'path'
@@ -12,7 +12,7 @@ const uuid = () => {
   return Math.random().toString(16).slice(2)
 }
 
-const getJsonSubtitles = async (): Promise<Video[]> => {
+const getJsonCaptions = async (): Promise<Video[]> => {
   const dirPath = './public/songs'
   const videoNames = await fs.readdir('./public/songs')
   const songs = []
@@ -22,38 +22,45 @@ const getJsonSubtitles = async (): Promise<Video[]> => {
     if (!fileStat.isDirectory()) {
       continue
     }
-    const fileContents = await fs.readFile(`${videoNamePath}/subtitles.json`, 'utf8')
 
-    const subtitles: Subtitle[] = JSON.parse(fileContents).map((subtitle: Subtitle) => {
+    const fileContents = await fs.readFile(`${videoNamePath}/captions.json`, 'utf8')
+
+    const captions: Caption[] = JSON.parse(fileContents).map((caption: Caption) => {
       return {
-        ...subtitle,
-        start: Math.round(subtitle.start / 100) * 100,
-        end: Math.round(subtitle.end / 100) * 100,
+        ...caption,
+        start: Math.round(caption.start / 100) * 100,
+        end: Math.round(caption.end / 100) * 100,
       }
     })
 
     songs.push({
       name: videoName,
-      subtitles,
+      captions,
+      modifiedTime: fileStat.mtime,
+
     })
   }
 
-  return songs
+  songs.sort((a, b) => b.modifiedTime.getTime() - a.modifiedTime.getTime())
+
+  return songs.map(({ modifiedTime, ...rest }) => rest)
 }
 
-const addTextSubtitles = async () => {
-  const textFiles = await fs.readdir('./subtitles')
+const addTextCaptions = async () => {
+  const textFiles = await fs.readdir('./captions')
 
   for (const file of textFiles) {
     if (!file.endsWith('.txt')) {
       continue
     }
-    const filePath = path.join('./subtitles', file)
+
+    const filePath = path.join('./captions', file)
     const fileContents = await fs.readFile(filePath, 'utf8')
 
-    const fileSubtitles = fileContents.split('\n').map((line, index) => {
+    const fileCaptions = fileContents.split('\n').map((line, index) => {
       const start = (index * 800)
       const end = (index * 800 + 8000)
+
       return {
         start,
         end,
@@ -65,17 +72,17 @@ const addTextSubtitles = async () => {
     // write files to './public/songs'
     const videoName = file.replace(/\.txt$/, '')
 
-    const newPath = getSubtitlesFilePath(videoName)
+    const newPath = getCaptionsFilePath(videoName)
 
     await fs.mkdir(path.dirname(newPath), { recursive: true })
 
-    fs.writeFile(newPath, JSON.stringify(fileSubtitles))
+    fs.writeFile(newPath, JSON.stringify(fileCaptions))
     fs.rm(filePath)
   }
 }
 
 export async function GET() {
-  // await addTextSubtitles()
-  const subtitles = await getJsonSubtitles()
-  return Response.json(subtitles)
+  // await addTextCaptions()
+  const captions = await getJsonCaptions()
+  return Response.json(captions)
 }

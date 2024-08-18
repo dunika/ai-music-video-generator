@@ -9,7 +9,7 @@ import Videos from './Videos'
 type UpdateVideo = (video: Video) => Video;
 
 const emptyVideo: Video = {
-  subtitles: [],
+  captions: [],
   name: '',
 }
 

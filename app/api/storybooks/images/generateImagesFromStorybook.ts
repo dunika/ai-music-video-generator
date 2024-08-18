@@ -36,12 +36,12 @@ export const generateFromStoryBook = async ({
     const [pageIndex, page] = Object.entries(storybook[i])[0]
 
     console.log(`Generating image ${i + 1} of ${storybook.length}`)
-    const [subtitleIndex, imageIndex] = pageIndex.split('_')
+    const [captionIndex, imageIndex] = pageIndex.split('_')
 
     const storybookImagePath = getStorybookImagePath(
       videoName,
       style,
-      Number(subtitleIndex),
+      Number(captionIndex),
       Number(imageIndex),
     )
 
@@ -64,7 +64,7 @@ export const generateFromStoryBook = async ({
         images[j],
         style,
         videoName,
-        subtitleIndex,
+        captionIndex,
         imageIndex,
         j > 0 ? j.toString() : '',
       )

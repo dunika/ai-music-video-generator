@@ -6,13 +6,13 @@ import {
 } from '@/types'
 import {
   getLyricsTxt,
-  getSubtitlesJson,
+  getCaptionsJson,
 } from '@/modules/videoFs'
 import { openai } from '@/modules/openai'
 import { retry } from '@/modules/async'
 
 import { toTitleCase } from '@/modules/strings'
-import { getSubtitleImageFileName } from '../../../modules/videoFsPath'
+import { getCaptionImageFileName } from '../../../modules/videoFsPath'
 
 const countNames = {
   1: 'first',
@@ -29,34 +29,34 @@ const countNames = {
   12: 'twelfth',
 }
 
-export const getImageWordsCounts = (subtitles) => {
+export const getImageWordsCounts = (captions) => {
   const wordCounts = { }
-  const subtitleIndexWordCounts = { }
+  const captionIndexWordCounts = { }
 
-  for (let i = 0; i < subtitles.length; i++) {
-    const subtitle = subtitles[i]
-    const { text } = subtitle
+  for (let i = 0; i < captions.length; i++) {
+    const caption = captions[i]
+    const { text } = caption
 
     wordCounts[text] = wordCounts[text] ? wordCounts[text] + 1 : 1
 
-    subtitleIndexWordCounts[i] = wordCounts[text]
+    captionIndexWordCounts[i] = wordCounts[text]
   }
 
   return {
-    subtitleIndexWordCounts,
+    captionIndexWordCounts,
     wordCounts,
   }
 }
 
-const getImagesToCreate = (subtitles) => {
+const getImagesToCreate = (captions) => {
   const imageStarts = []
-  for (let subtitleIndex = 0; subtitleIndex < subtitles.length; subtitleIndex++) {
-    const subtitle = subtitles[subtitleIndex]
-    const imageCount = subtitle.images || 0
+  for (let captionIndex = 0; captionIndex < captions.length; captionIndex++) {
+    const caption = captions[captionIndex]
+    const imageCount = caption.images || 0
 
     for (let imageIndex = 0; imageIndex < imageCount; imageIndex++) {
       imageStarts.push({
-        subtitleIndex,
+        captionIndex,
         imageIndex,
       })
     }
@@ -68,7 +68,7 @@ const getImagesToCreate = (subtitles) => {
 export const generateStorybookBasic = async (
   videoName: string,
 ): Promise<StorybookPage[]> => {
-  const subtitles = await getSubtitlesJson(videoName)
+  const captions = await getCaptionsJson(videoName)
 
   const lyrics = await getLyricsTxt(videoName)
 
@@ -78,10 +78,10 @@ export const generateStorybookBasic = async (
   const userCreateImageNext = await fs.readFile('./prompts/lyric-image/next-image.txt', 'utf8')
 
   const {
-    subtitleIndexWordCounts,
-  } = getImageWordsCounts(subtitles)
+    captionIndexWordCounts,
+  } = getImageWordsCounts(captions)
 
-  const imagesToCreate = getImagesToCreate(subtitles)
+  const imagesToCreate = getImagesToCreate(captions)
 
   console.log(`gettings descriptions for ${imagesToCreate.length} images`)
   const ideas = []
@@ -94,15 +94,15 @@ export const generateStorybookBasic = async (
   ]
 
   for (const {
-    subtitleIndex,
+    captionIndex,
     imageIndex,
   } of imagesToCreate) {
-    const subtitle = subtitles[subtitleIndex]
-    const wordCount = countNames[subtitleIndexWordCounts[subtitleIndex]]
+    const caption = captions[captionIndex]
+    const wordCount = countNames[captionIndexWordCounts[captionIndex]]
     const promt = ideas.length > 0 ? userCreateImageNext : userCreateImage
     const userCreateImagePrompt = format(promt, {
       song: toTitleCase(videoName.split('__')[0]),
-      word: subtitle.text,
+      word: caption.text,
       lyrics,
       wordCount,
       countNames,
@@ -123,7 +123,7 @@ export const generateStorybookBasic = async (
 
     ideas.push({
       imageIdea,
-      subtitleIndex,
+      captionIndex,
       imageIndex,
     })
     messages.push({
@@ -131,12 +131,12 @@ export const generateStorybookBasic = async (
       content: imageIdea,
     })
 
-    console.log(`Generated image for ${subtitle.text} ${imageIndex > 0 ? ` at index ${imageIndex}` : ''}`)
+    console.log(`Generated image for ${caption.text} ${imageIndex > 0 ? ` at index ${imageIndex}` : ''}`)
   }
 
   const promises = ideas.map(async ({
     imageIdea,
-    subtitleIndex,
+    captionIndex,
     imageIndex,
   }) => {
     const imageDescription = await retry(async () => {
@@ -157,7 +157,7 @@ export const generateStorybookBasic = async (
     })
 
     return {
-      [getSubtitleImageFileName(subtitleIndex, imageIndex)]: imageDescription,
+      [getCaptionImageFileName(captionIndex, imageIndex)]: imageDescription,
     }
   })
 

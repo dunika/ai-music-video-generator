@@ -1,6 +1,6 @@
 'use client'
 
-import { SubtitleTimeEditor } from '@/app/SubtitlesEditor'
+import { CaptionTimeEditor } from '@/app/CaptionsEditor'
 import { toTitleCase } from '@/modules/strings'
 import { staticFile } from '@/modules/video'
 import { getStorybookImagePath } from '@/modules/videoFsPath'
@@ -68,14 +68,14 @@ export const ImageVersionContainer = createContainer(useImageVersion)
 
 type VideoDetail = {
   title: string,
-  subtitle: string,
+  caption: string,
   videoType: VideoType,
 }
 
 const VideoDetailContainer = createContainer(() => {
   const [videoDetail, setVideoDetail] = useState<VideoDetail>({
     title: '',
-    subtitle: 'Basil Breen',
+    caption: 'Basil Breen',
     videoType: VideoType.Storybook,
   })
 
@@ -169,8 +169,8 @@ const RenderVideo: React.FC<{
 function RegenerateImage({
   videoName,
   style,
-  subtitle,
-  subtitleIndex,
+  caption,
+  captionIndex,
   imageIndex,
 }) {
   const [negative, setNegative] = useState('')
@@ -188,8 +188,8 @@ function RegenerateImage({
             body: JSON.stringify({
               videoName,
               style,
-              subtitle,
-              subtitleIndex,
+              caption,
+              captionIndex,
               imageIndex,
               negative,
             }),
@@ -213,10 +213,10 @@ function RegenerateImage({
 function SwapImage({
   videoName,
   style,
-  subtitleIndex,
+  captionIndex,
   imageIndex,
-  subtitle,
-  subtitles,
+  caption,
+  captions,
   incrementVersion,
 }) {
   const [oldSubIndex, setOldSubIndex] = useState(0)
@@ -247,9 +247,9 @@ function SwapImage({
               style,
               oldSubIndex,
               oldImageIndex,
-              subtitleIndex,
+              captionIndex,
               imageIndex,
-              subtitle,
+              caption,
             }),
             cache: 'no-cache',
           })
@@ -258,10 +258,10 @@ function SwapImage({
       >
         Swap
         {' '}
-        {subtitle}
+        {caption}
         {' - '}
 
-        {subtitleIndex}
+        {captionIndex}
         {' '}
       </button>
       <select
@@ -269,10 +269,10 @@ function SwapImage({
         value={oldSubIndex ?? ''}
         onChange={(e) => setOldSubIndex(e.target.value)}
       >
-        {subtitles.map((subtitle, index) => {
-          if (subtitle.images === 0) return null
+        {captions.map((caption, index) => {
+          if (caption.images === 0) return null
           return (
-            <option key={index} value={index}>{subtitle.text}</option>
+            <option key={index} value={index}>{caption.text}</option>
           )
         })}
       </select>
@@ -359,8 +359,8 @@ const useExistingStyles = (videoName) => {
 function StroybookImage({
   videoName,
   style,
-  subtitle,
-  subtitleIndex,
+  caption,
+  captionIndex,
   imageIndex,
   version,
   incrementVersion,
@@ -384,11 +384,11 @@ function StroybookImage({
         <p>
           No image found for
           {' '}
-          {subtitle}
+          {caption}
           {' '}
           -
           {' '}
-          {subtitleIndex}
+          {captionIndex}
           {' '}
           -
           {' '}
@@ -397,8 +397,8 @@ function StroybookImage({
         <RegenerateImage
           videoName={videoName}
           style={style}
-          subtitle={subtitle}
-          subtitleIndex={subtitleIndex}
+          caption={caption}
+          captionIndex={captionIndex}
           imageIndex={imageIndex}
         />
       </div>
@@ -409,18 +409,18 @@ function StroybookImage({
     <>
       <SwapImage
         incrementVersion={incrementVersion}
-        subtitles={currentVideo?.subtitles}
+        captions={currentVideo?.captions}
         videoName={videoName}
         style={style}
-        subtitle={subtitle}
-        subtitleIndex={subtitleIndex}
+        caption={caption}
+        captionIndex={captionIndex}
         imageIndex={imageIndex}
       />
       <RegenerateImage
         videoName={videoName}
         style={style}
-        subtitle={subtitle}
-        subtitleIndex={subtitleIndex}
+        caption={caption}
+        captionIndex={captionIndex}
         imageIndex={imageIndex}
       />
       <img
@@ -456,19 +456,19 @@ const StorybookPages: React.FC<{
 
   const [version, incrementVersion] = ImageVersionContainer.useContainer()
 
-  const imagePaths = currentVideo?.subtitles.map((subtitle, subtitleIndex) => {
+  const imagePaths = currentVideo?.captions.map((caption, captionIndex) => {
     const paths = []
-    for (let imageIndex = 0; imageIndex < subtitle.images; imageIndex++) {
+    for (let imageIndex = 0; imageIndex < caption.images; imageIndex++) {
       const image = getStorybookImagePath(
         videoName,
         style,
-        subtitleIndex,
+        captionIndex,
         imageIndex,
       )
       paths.push({
         image: staticFile(image),
-        subtitle: subtitle.text,
-        subtitleIndex,
+        caption: caption.text,
+        captionIndex,
         imageIndex,
       })
     }
@@ -529,17 +529,17 @@ const StorybookPages: React.FC<{
       </button>
       {open && imagePaths.map(({
         image,
-        subtitleIndex,
+        captionIndex,
         imageIndex,
-        subtitle,
+        caption,
       }) => {
         return (
           <StroybookImage
-            key={`${subtitleIndex}-${imageIndex}`}
+            key={`${captionIndex}-${imageIndex}`}
             videoName={videoName}
             style={style}
-            subtitle={subtitle}
-            subtitleIndex={subtitleIndex}
+            caption={caption}
+            captionIndex={captionIndex}
             imageIndex={imageIndex}
             version={version}
             incrementVersion={incrementVersion}
@@ -638,10 +638,10 @@ function Page() {
   const videoConfig: VideoConfig = {
     video: {
       name: currentVideo?.name ?? '',
-      subtitles: currentVideo?.subtitles ?? [],
+      captions: currentVideo?.captions ?? [],
     },
     title: videoDetail.title,
-    subtitle: videoDetail.subtitle,
+    caption: videoDetail.caption,
     videoType: videoDetail.videoType,
     storybookPageStyle,
     imageVersion,
@@ -673,7 +673,7 @@ function Page() {
           <button onClick={() => setSlowMo(!slowMo)} className={`${styles.button} ml-2`}>
             Slow Mo
           </button>
-          <SubtitleTimeEditor
+          <CaptionTimeEditor
             seekTo={seekTo}
             isPlaying={() => playerRef.current?.isPlaying()}
             getCurrentFrame={() => playerRef.current?.getCurrentFrame()}
@@ -711,7 +711,7 @@ function Page() {
   )
 }
 
-function SubtitlesProvider({ children }) {
+function CaptionsProvider({ children }) {
   const {
     data: videos,
   } = useSuspenseQuery({
@@ -738,11 +738,11 @@ const Home: NextPage = () => {
       <VideoDetailContainer.Provider>
         <ImageVersionContainer.Provider>
           <Suspense fallback={<div>Loading...</div>}>
-            <SubtitlesProvider>
+            <CaptionsProvider>
               <CurrentVideo.Provider>
                 <Page />
               </CurrentVideo.Provider>
-            </SubtitlesProvider>
+            </CaptionsProvider>
           </Suspense>
         </ImageVersionContainer.Provider>
       </VideoDetailContainer.Provider>

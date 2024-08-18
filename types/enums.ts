@@ -1,6 +1,6 @@
 export enum VideoType {
   Storybook = 'storybook',
-  Subtitles = 'subtitles',
+  Captions = 'captions',
 }
 
 export enum Style {

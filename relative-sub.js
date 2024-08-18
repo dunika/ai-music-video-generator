@@ -131,19 +131,19 @@ const subs = [
   },
 ]
 
-function adjustSubtitles(subtitles, newStartTime) {
-  if (!subtitles.length) return []
+function adjustCaptions(captions, newStartTime) {
+  if (!captions.length) return []
 
   // Calculate the time difference between the new and the original start time
-  const timeDiff = newStartTime - subtitles[0].start
+  const timeDiff = newStartTime - captions[0].start
 
-  // Adjust each subtitle's start time
-  return subtitles.map((sub) => ({
+  // Adjust each caption's start time
+  return captions.map((sub) => ({
     ...sub,
     start: sub.start + timeDiff,
   }))
 }
 
-// Set the new start time for the first subtitle
-const adjustedSubs = adjustSubtitles(subs, 156200) // Example: new start time is 35000
+// Set the new start time for the first caption
+const adjustedSubs = adjustCaptions(subs, 156200) // Example: new start time is 35000
 copy(adjustedSubs)

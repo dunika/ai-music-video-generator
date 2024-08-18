@@ -3,16 +3,15 @@ import {
   Style,
 } from '@/types/enums'
 
-export type Subtitle = {
+export type Caption = {
   start: number
-  end: number
   text: string
-  images: number
+  images?: number
 }
 
 export type Video = {
   name: string
-  subtitles: Subtitle[]
+  captions: Caption[]
 }
 
 export type StorybookPage = {
@@ -27,7 +26,7 @@ export type ImageAlignment = 'none' | 'top' | 'bottom'
 export type VideoConfig = {
   video: Video;
   title?: string;
-  subtitle? : string;
+  caption? : string;
   titleWidth?: string;
   textColor?: string;
   videoType: VideoType;

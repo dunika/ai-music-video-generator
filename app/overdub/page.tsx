@@ -7,14 +7,18 @@ import React, {
   useState,
 } from 'react'
 import useAudioPlaybackRecorder from './media-recorder-hooks/src/useAudioPlaybackRecorder'
+import useDecibelMonitor from './media-recorder-hooks/src/useDecibelMonitor'
 import useMediaDevices from './media-recorder-hooks/src/useMediaDevices'
 
-const upload = async (file: File) => {
+
+const upload = async (fileToTranscribe: File, videoName: string, file: File) => {
   const formData = new FormData()
 
+  formData.append('fileToTranscribe', fileToTranscribe)
+  formData.append('videoName', videoName)
   formData.append('file', file)
 
-  await fetch('/api/videos/subtitles/transcribe', {
+  await fetch('/api/videos/captions/transcribe', {
     method: 'POST',
     body: formData,
   })
@@ -36,7 +40,11 @@ const downloadBlob = (blob: Blob, filename: string) => {
   window.URL.revokeObjectURL(url)
 }
 
-const AudioDeviceSelector: React.FC = ({
+const AudioDeviceSelector: React.FC<{
+  devices: MediaDeviceInfo[],
+  selectedDeviceId: string,
+  onDeviceChange: (_deviceId: string) => void,
+}> = ({
   devices,
   selectedDeviceId,
   onDeviceChange,
@@ -52,6 +60,7 @@ const AudioDeviceSelector: React.FC = ({
 
 const Overdub: NextPage = () => {
   const [file, setFile] = useState<File | null>(null)
+  const [videoName, setVideoName] = useState<string>('')
 
   const [audioDeviceId, setAudioDeviceId] = useState<string>('default')
   const [audioInputDeviceId, setAudioInputDeviceId] = useState<string>('default')
@@ -74,14 +83,17 @@ const Overdub: NextPage = () => {
   }, [file])
 
   useEffect(() => {
-    console.log({ devices })
-  })
+    if (file) {
+      setVideoName(file.name.split('.')[0])
+    }
+  }, [file])
 
   const {
     controls,
     blob,
     error,
     state,
+    stream,
   } = useAudioPlaybackRecorder({
     ...audioSrcAndFormat,
     inputDeviceId: audioDeviceId,
@@ -90,12 +102,14 @@ const Overdub: NextPage = () => {
     onFinished: (blob) => {
       const uploadFile = new File([blob], `${file?.name ?? 'file'}.webm`)
 
-      upload(uploadFile)
+      upload(uploadFile, videoName, file)
       // downloadBlob(blob, `overdub.${AudioMediaExtension.Mp3}`)
 
       downloadBlob(blob, 'overdub.webm')
     },
   })
+
+  const d = useDecibelMonitor({ stream })
 
   const download = () => {
     downloadBlob(new Blob(blob, { type: 'audio/webm;codecs=opus' }), 'overdub.webm')
@@ -111,13 +125,24 @@ const Overdub: NextPage = () => {
   if (!file) {
     return (
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} placeholder="Upload your audio file" />
+        <input
+          type="file"
+          onChange={({ target }) => {
+            const file = target.files?.[0]
+            if (file) {
+              setFile(file)
+            }
+          }}
+          placeholder="Add file to transcribe"
+        />
       </div>
     )
   }
 
   return (
     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <h3>Decibels</h3>
+      <div>{d}</div>
       <h3>Audio Input</h3>
       <AudioDeviceSelector
         devices={devices.audioinput}
@@ -131,6 +156,9 @@ const Overdub: NextPage = () => {
         selectedDeviceId={audioInputDeviceId}
         onDeviceChange={setAudioInputDeviceId}
       />
+      <br />
+      <h3>File Name</h3>
+      <input type="text" onChange={(e) => setVideoName(e.target.value)} value={videoName} />
       <br />
       <button onClick={controls.start}>Start</button>
       <br />
@@ -146,7 +174,7 @@ const Overdub: NextPage = () => {
           onChange={(e) => {
             return upload(e.target.files[0])
           }}
-          placeholder="Upload your audio file"
+          placeholder="Manually add audio transcription"
         />
       </div>
     </div>
@@ -154,29 +182,3 @@ const Overdub: NextPage = () => {
 }
 
 export default Overdub
-
-// stream = window.streamReference
-// audioChunks = [];
-
-// mediaRecorder.ondataavailable = event => {
-//     if (event.data.size > 0) {
-//         audioChunks.push(event.data);
-//     }
-// };
-
-// mediaRecorder.onstop = () => {
-//     debugger
-//     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-//     const audioUrl = URL.createObjectURL(audioBlob);
-
-//     // Optionally, you can save the audio blob to a file
-//     const a = document.createElement('a');
-//     a.style.display = 'none';
-//     a.href = audioUrl;
-//     a.download = 'audio_recording.wav';
-//     document.body.appendChild(a);
-//     a.click();
-//     document.body.removeChild(a);
-// };
-
-// mediaRecorder.start();

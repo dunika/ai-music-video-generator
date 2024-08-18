@@ -1,5 +1,3 @@
-import ffmpeg from 'fluent-ffmpeg'
-
 import {
   getAudioFilePath,
   getVideoFilePath,
@@ -7,20 +5,7 @@ import {
 import {
   VIDEO_FPS,
 } from '@/constants'
-import { VideoType } from '../../../../types/enums'
-
-function getMediaDuration(filePath: string): Promise<number> {
-  return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
-      if (err) {
-        resolve(0)
-        return
-      }
-      const { duration } = metadata.format
-      resolve(duration)
-    })
-  })
-}
+import { getMediaDuration } from '@/modules/ffmpeg'
 
 export async function GET(request: Request) {
   // get from query
@@ -28,33 +13,40 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const {
     videoName,
-    videoType,
   } = Object.fromEntries(searchParams.entries())
   const audioFilePath = getAudioFilePath(videoName)
   const videoFilePath = getVideoFilePath(videoName)
 
-  let durationInFrames = 0
-  let hasVideo = false
-  let hasAudio = false
-
   const [
-    audioDurationInSeconds,
-    videoMetadata,
+    audioDurationResult,
+    videoDurationResult,
   ] = await Promise.allSettled([
     getMediaDuration(audioFilePath),
     getMediaDuration(videoFilePath),
   ])
 
-  hasVideo = videoMetadata.status === 'fulfilled'
-  hasAudio = audioDurationInSeconds.status === 'fulfilled'
 
-  if (audioDurationInSeconds.status === 'fulfilled') {
-    durationInFrames = Math.floor(audioDurationInSeconds.value * VIDEO_FPS)
-  } else if (videoMetadata.status === 'fulfilled') {
-    durationInFrames = Math.floor(videoMetadata.value * VIDEO_FPS)
-  } else {
-    throw new Error('No audio or video found')
+  const hasAudioDuration = audioDurationResult.status === 'fulfilled'
+  const hasVideoDuration = videoDurationResult.status === 'fulfilled'
+
+  if (!hasAudioDuration && !hasVideoDuration) {
+    return Response.json({
+      error: audioDurationResult.reason || videoDurationResult.reason,
+    }, {
+      status: 500,
+    })
   }
 
-  return Response.json(durationInFrames)
+  if (hasAudioDuration) {
+    return Response.json(getDurationInFrames(audioDurationResult.value))
+  }
+
+  if (hasVideoDuration) {
+    return Response.json(getDurationInFrames(videoDurationResult.value))
+  }
+}
+
+
+const getDurationInFrames = async (mediaDuration: number) => {
+  return Math.floor(mediaDuration * VIDEO_FPS)
 }

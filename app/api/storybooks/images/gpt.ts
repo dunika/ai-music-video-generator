@@ -44,7 +44,7 @@ export const regenerateStorybookDescription = async (
   style: Style,
   oldDescription: string,
   lyrics: string,
-  subtitle: string,
+  caption: string,
   negative?: string,
 ) => {
   const system = await fs.readFile('./prompts/lyric-image/system.txt', 'utf8')
@@ -61,7 +61,7 @@ export const regenerateStorybookDescription = async (
       {
         role: 'user',
         content: format(userNewImage, {
-          word: subtitle,
+          word: caption,
           oldDescription,
           lyrics,
           song: toTitleCase(videoName.split('__')[0]),

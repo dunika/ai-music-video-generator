@@ -24,7 +24,7 @@ import {
   getVideoFilePath,
 } from '../../modules/videoFsPath'
 import {
-  Subtitle,
+  Caption,
   VideoConfig,
 } from '../../types'
 import {
@@ -39,19 +39,19 @@ import {
   textColors,
 } from './style'
 
-const getImageStarts = (subtitlesClean: Subtitle[]) => {
-  const subtitles = JSON.parse(JSON.stringify(subtitlesClean))
-  subtitles[0].start = 0
+const getImageStarts = (captionsClean: Caption[]) => {
+  const captions = JSON.parse(JSON.stringify(captionsClean))
+  captions[0].start = 0
   const imageStarts = []
-  for (let subtitleIndex = 0; subtitleIndex < subtitles.length; subtitleIndex++) {
-    const subtitle = subtitles[subtitleIndex]
-    const { start } = subtitle
-    let { end } = subtitle
-    // find the next subtitle with images and use its start time as the end time
-    for (let i = subtitleIndex + 1; i < subtitles.length; i++) {
-      const nextSubtitle = subtitles[i]
-      if (nextSubtitle.images) {
-        end = nextSubtitle.start
+  for (let captionIndex = 0; captionIndex < captions.length; captionIndex++) {
+    const caption = captions[captionIndex]
+    const { start } = caption
+    let { end } = caption
+    // find the next caption with images and use its start time as the end time
+    for (let i = captionIndex + 1; i < captions.length; i++) {
+      const nextCaption = captions[i]
+      if (nextCaption.images) {
+        end = nextCaption.start
         break
       }
     }
@@ -59,14 +59,14 @@ const getImageStarts = (subtitlesClean: Subtitle[]) => {
     const duration = (end - start)
 
     let imageStart = start
-    for (let imageIndex = 0; imageIndex < subtitle.images; imageIndex++) {
+    for (let imageIndex = 0; imageIndex < caption.images; imageIndex++) {
       imageStarts.push({
         start: imageStart,
-        subtitleIndex,
+        captionIndex,
         imageIndex,
-        text: subtitle.text,
+        text: caption.text,
       })
-      imageStart = ((duration / subtitle.images) + imageStart)
+      imageStart = ((duration / caption.images) + imageStart)
     }
   }
 
@@ -78,7 +78,7 @@ type SingleImageProps = {
   show: boolean;
   imagePath: string;
   transform: string;
-  subtitleIndex: number;
+  captionIndex: number;
   text: string;
   imageIndex: number;
   height: string;
@@ -92,7 +92,7 @@ const SingleImage: React.FC<SingleImageProps> = ({
   show,
   imagePath,
   transform,
-  subtitleIndex,
+  captionIndex,
   text,
   imageIndex,
   height,
@@ -155,7 +155,7 @@ const SingleImage: React.FC<SingleImageProps> = ({
           }}
         >
           {' '}
-          {subtitleIndex}
+          {captionIndex}
           {' '}
           -
           {' '}
@@ -169,7 +169,7 @@ const SingleImage: React.FC<SingleImageProps> = ({
       onError={() => {
         setIsError(true)
       }}
-      key={`${subtitleIndex}_${imageIndex}`}
+      key={`${captionIndex}_${imageIndex}`}
       src={`${staticFile(imagePath)}?v=${imageVersion}`}
       style={style}
     />
@@ -178,7 +178,7 @@ const SingleImage: React.FC<SingleImageProps> = ({
 
 type ImageProps = {
   align?: 'none' | 'top' | 'bottom';
-  subtitles: Subtitle[];
+  captions: Caption[];
   videoName: string;
   storybookPageStyle: Style;
   imageVersion?: number;
@@ -186,7 +186,7 @@ type ImageProps = {
 
 const Images: React.FC<ImageProps> = ({
   align = 'none',
-  subtitles,
+  captions,
   videoName,
   storybookPageStyle,
   imageVersion,
@@ -197,7 +197,7 @@ const Images: React.FC<ImageProps> = ({
   const bottom = align === 'bottom' ? 'auto' : '0'
   const height = align === 'none' ? '100%' : '1320px'
 
-  const imageStarts = getImageStarts(subtitles)
+  const imageStarts = getImageStarts(captions)
 
   return (
     <div style={{
@@ -213,7 +213,7 @@ const Images: React.FC<ImageProps> = ({
 
       {imageStarts.map(({
         start,
-        subtitleIndex,
+        captionIndex,
         imageIndex,
         text,
       }) => {
@@ -228,7 +228,7 @@ const Images: React.FC<ImageProps> = ({
           },
         )
 
-        const zoomIn = subtitleIndex % 2 === 0
+        const zoomIn = captionIndex % 2 === 0
 
         const zoomInAmount = interpolate(
           (frame - startFrame),
@@ -250,23 +250,23 @@ const Images: React.FC<ImageProps> = ({
           },
         )
 
-        const show = hasStarted || (subtitleIndex === 0 && frame < 30)
+        const show = hasStarted || (captionIndex === 0 && frame < 30)
         const imagePath = getStorybookImagePath(
           videoName,
           storybookPageStyle,
-          subtitleIndex,
+          captionIndex,
           imageIndex,
         )
 
         return (
           <SingleImage
             imagePath={imagePath}
-            key={`${subtitleIndex}_${imageIndex}`}
+            key={`${captionIndex}_${imageIndex}`}
             transform={`scale(${zoomIn ? zoomInAmount : zoomOutAmount})`}
             show={!!show}
             align={align}
             text={text}
-            subtitleIndex={subtitleIndex}
+            captionIndex={captionIndex}
             imageIndex={imageIndex}
             height={height}
             bottom={bottom}
@@ -279,14 +279,14 @@ const Images: React.FC<ImageProps> = ({
   )
 }
 
-type SubtitleTextProps = {
+type CaptionTextProps = {
   text: string;
   textColor: string;
   start: number;
   end: number;
 }
 
-const SubtitleText: React.FC<SubtitleTextProps> = ({
+const CaptionText: React.FC<CaptionTextProps> = ({
   text,
   textColor,
   end,
@@ -296,7 +296,7 @@ const SubtitleText: React.FC<SubtitleTextProps> = ({
   const durationInFrames = Math.round(((end - start) * fps) / 1000)
 
   if (durationInFrames <= 0) {
-    throw new Error(`Subtitle "${text}" duration is negative: ${durationInFrames} - start: ${start} - end: ${end}`)
+    throw new Error(`Caption "${text}" duration is negative: ${durationInFrames} - start: ${start} - end: ${end}`)
   }
 
   const from = Math.round((start * fps) / 1000)
@@ -334,13 +334,13 @@ const SubtitleText: React.FC<SubtitleTextProps> = ({
   )
 }
 
-type SubtitlesBoxProps = {
-  subtitles: Subtitle[];
+type CaptionsBoxProps = {
+  captions: Caption[];
   textColor: string;
 }
 
-const SubtitlesBox: React.FC<SubtitlesBoxProps> = ({
-  subtitles,
+const CaptionsBox: React.FC<CaptionsBoxProps> = ({
+  captions,
   textColor,
 }) => {
   return (
@@ -359,16 +359,16 @@ const SubtitlesBox: React.FC<SubtitlesBoxProps> = ({
         borderRadius: '0%',
       }}
     >
-      {subtitles.map((subtitle, index) => {
-        const isLast = index === subtitles.length - 1
+      {captions.map((caption, index) => {
+        const isLast = index === captions.length - 1
         // TODO: last logic
         return (
-          <SubtitleText
+          <CaptionText
             key={index}
-            text={subtitle.text}
+            text={caption.text}
             textColor={textColor}
-            start={subtitle.start}
-            end={isLast ? subtitle.start + 5000 : subtitles[index + 1].start}
+            start={caption.start}
+            end={isLast ? caption.start + 5000 : captions[index + 1].start}
           />
         )
       })}
@@ -420,7 +420,7 @@ const Title: React.FC<{
   width,
   textColor,
   textShadowColor,
-  heading: subtitle,
+  heading: caption,
   videoType,
   title,
 }) => {
@@ -476,7 +476,7 @@ const Title: React.FC<{
                   textAlign: 'center',
                 }}
               >
-                {subtitle}
+                {caption}
               </div>
               <div
                 style={{
@@ -512,7 +512,7 @@ type Props = VideoConfig & {
 export const Main: React.FC<Props> = ({
   video,
   title,
-  subtitle: artist = 'Basil Breen',
+  caption: artist = 'Basil Breen',
   titleWidth = '90%',
   textColor = 'chirstmas',
   videoType,
@@ -544,7 +544,7 @@ export const Main: React.FC<Props> = ({
         }}
       />
       )}
-      {hasVideo && videoType === VideoType.Subtitles && !isRendering && (
+      {hasVideo && videoType === VideoType.Captions && !isRendering && (
         <Video
           src={staticFile(videoUrl)}
           style={{
@@ -586,15 +586,15 @@ export const Main: React.FC<Props> = ({
           videoType={videoType}
         />
       )} */}
-      <SubtitlesBox
-        subtitles={video.subtitles}
+      <CaptionsBox
+        captions={video.captions}
         textColor={text}
         textShadow={shadow}
       />
       {videoType === VideoType.Storybook && (
         <Images
           align={imageAlignment}
-          subtitles={video.subtitles}
+          captions={video.captions}
           videoName={video.name}
           storybookPageStyle={storybookPageStyle}
           imageVersion={imageVersion}

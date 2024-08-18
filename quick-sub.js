@@ -36,22 +36,22 @@ Believe
 `
 
 // Split the lines by newline and filter out any empty lines
-const subtitleLines = lines.split('\n').filter((line) => line.trim() !== '')
+const captionLines = lines.split('\n').filter((line) => line.trim() !== '')
 
 // Initialize the start time
 let startTime = 0
 
-// Create the subtitles array
-const subtitles = subtitleLines.map((text) => {
-  const subtitle = {
+// Create the captions array
+const captions = captionLines.map((text) => {
+  const caption = {
     text,
     start: startTime,
   }
-  // Increase the start time for the next subtitle
+  // Increase the start time for the next caption
   startTime += 700
-  return subtitle
+  return caption
 })
 
-console.log(subtitles)
+console.log(captions)
 
-copy(subtitles)
+copy(captions)

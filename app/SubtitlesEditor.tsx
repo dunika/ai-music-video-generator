@@ -1,7 +1,7 @@
 import useDebouncedEffect from '@/hooks/useDebouncedEffect'
 import CurrentVideo from '@/state/CurrentVideo'
 import type {
-  Subtitle,
+  Caption,
   Video,
 } from '@/types'
 import React, {
@@ -13,100 +13,100 @@ import { VIDEO_FPS } from '../constants'
 
 import styles from './styles'
 
-type GetSubtitleUpdates = ({
-  subtitleIndex,
-  subtitles,
+type GetCaptionUpdates = ({
+  captionIndex,
+  captions,
 }: {
-  subtitleIndex: number,
-  subtitles: Subtitle[],
-}) => { [key: number]: Subtitle };
+  captionIndex: number,
+  captions: Caption[],
+}) => { [key: number]: Caption };
 
-const getSubtitlesWithImageCounts = (passedSubtitles: Subtitle[]): Subtitle[] => {
-  // Initialize subtitles with the images property set to 0
-  const subtitles = passedSubtitles.map((subtitle) => ({
-    ...subtitle,
+const getCaptionsWithImageCounts = (passedCaptions: Caption[]): Caption[] => {
+  // Initialize captions with the images property set to 0
+  const captions = passedCaptions.map((caption) => ({
+    ...caption,
     images: 0,
   }))
 
   let timeOfLastImage = 0
   const imageFrequency = 2000
 
-  for (let index = 0; index < subtitles.length; index++) {
-    const subtitle = subtitles[index]
-    const nextSubtitle = subtitles[index + 1]
-    const subtitleEnd = nextSubtitle ? nextSubtitle.start : subtitle.end
-    const durationIncludingNextStart = subtitleEnd - timeOfLastImage
+  for (let index = 0; index < captions.length; index++) {
+    const caption = captions[index]
+    const nextCaption = captions[index + 1]
+    const captionEnd = nextCaption ? nextCaption.start : caption.end
+    const durationIncludingNextStart = captionEnd - timeOfLastImage
 
     // Determine if the gap or the total duration warrants adding images
     if (durationIncludingNextStart > imageFrequency) {
       const imagesToAdd = Math.floor(durationIncludingNextStart / imageFrequency)
-      subtitle.images = imagesToAdd
+      caption.images = imagesToAdd
       // Advance the timeOfLastImage by the allotted image slots
       timeOfLastImage += imagesToAdd * imageFrequency
     } else if (index === 0) {
-      // Special case for the first subtitle if it starts after a significant gap
-      subtitle.images = 1
-      timeOfLastImage = subtitle.start
+      // Special case for the first caption if it starts after a significant gap
+      caption.images = 1
+      timeOfLastImage = caption.start
     }
   }
 
-  return subtitles
+  return captions
 }
 
-const getUpdatesForNextSubtitles: GetSubtitleUpdates = ({
-  subtitleIndex,
-  subtitles,
+const getUpdatesForNextCaptions: GetCaptionUpdates = ({
+  captionIndex,
+  captions,
 }) => {
   let currentStart = null
 
-  const update: { [key: number]: Subtitle } = {}
-  for (let index = subtitleIndex; index < subtitles.length; index++) {
-    const currentSubtitle = subtitles[index]
-    const nextSubtitle = subtitles[index + 1]
+  const update: { [key: number]: Caption } = {}
+  for (let index = captionIndex; index < captions.length; index++) {
+    const currentCaption = captions[index]
+    const nextCaption = captions[index + 1]
 
-    currentSubtitle.start = currentStart ?? currentSubtitle.start
+    currentCaption.start = currentStart ?? currentCaption.start
 
-    update[index] = currentSubtitle
+    update[index] = currentCaption
 
-    if (!nextSubtitle) {
+    if (!nextCaption) {
       break
     }
 
-    const currentDuration = nextSubtitle.start - currentSubtitle.start
+    const currentDuration = nextCaption.start - currentCaption.start
 
     if (currentDuration >= 200) {
       break
     } else {
-      currentStart = currentSubtitle.start + 200
+      currentStart = currentCaption.start + 200
     }
   }
   return update
 }
 
-const getUpdatesForPreviousSubtitles: GetSubtitleUpdates = ({
-  subtitleIndex,
-  subtitles,
+const getUpdatesForPreviousCaptions: GetCaptionUpdates = ({
+  captionIndex,
+  captions,
 }) => {
   let currentStart = null
-  const update: { [key: number]: Subtitle } = {}
-  for (let index = subtitleIndex; index >= 0; index--) {
-    const currentSubtitle = subtitles[index]
-    const previousSubtitle = subtitles[index - 1]
+  const update: { [key: number]: Caption } = {}
+  for (let index = captionIndex; index >= 0; index--) {
+    const currentCaption = captions[index]
+    const previousCaption = captions[index - 1]
 
-    currentSubtitle.start = currentStart ?? currentSubtitle.start
+    currentCaption.start = currentStart ?? currentCaption.start
 
-    update[index] = currentSubtitle
+    update[index] = currentCaption
 
-    if (!previousSubtitle) {
+    if (!previousCaption) {
       break
     }
 
-    const previousDuration = currentSubtitle.start - previousSubtitle.start
+    const previousDuration = currentCaption.start - previousCaption.start
 
     if (previousDuration >= 200) {
       break
     } else {
-      currentStart = currentSubtitle.start - 200
+      currentStart = currentCaption.start - 200
     }
 
     if (currentStart < 0) {
@@ -116,18 +116,18 @@ const getUpdatesForPreviousSubtitles: GetSubtitleUpdates = ({
   return update
 }
 
-type SubtitleUpdateProps = {
+type CaptionUpdateProps = {
   seekTo: (timeInSeconds: number) => void,
   getCurrentFrame: () => number,
   isPlaying: boolean,
 }
 
-export const SubtitleTimeEditor: React.FC<SubtitleUpdateProps> = ({
+export const CaptionTimeEditor: React.FC<CaptionUpdateProps> = ({
   seekTo,
   getCurrentFrame,
   isPlaying,
 }) => {
-  const subtitleContainerRef = useRef(null)
+  const captionContainerRef = useRef(null)
   const [currentSubIndex, setCurrentSub] = useState(0)
   const {
     currentVideo: video,
@@ -135,7 +135,7 @@ export const SubtitleTimeEditor: React.FC<SubtitleUpdateProps> = ({
   } = CurrentVideo.useContainer()
 
   useDebouncedEffect(() => {
-    fetch('http://localhost:3000/api/videos/subtitles', {
+    fetch('http://localhost:3000/api/videos/captions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -145,30 +145,30 @@ export const SubtitleTimeEditor: React.FC<SubtitleUpdateProps> = ({
     })
   }, [video], 1000)
 
-  const updateCurrentVideoSubtitlesWithImageCounts = () => {
+  const updateCurrentVideoCaptionsWithImageCounts = () => {
     updateCurrentVideo((currentVideo: Video): Video => {
-      const subtitlesWithImageCounts = getSubtitlesWithImageCounts(currentVideo.subtitles)
+      const captionsWithImageCounts = getCaptionsWithImageCounts(currentVideo.captions)
       return {
         ...currentVideo,
-        subtitles: subtitlesWithImageCounts,
+        captions: captionsWithImageCounts,
       }
     })
   }
 
-  const updateSubtitleStart = (subtitleIndex: number, start: number) => {
+  const updateCaptionstart = (captionIndex: number, start: number) => {
     updateCurrentVideo((currentVideo: Video): Video => {
-      const subtitles = currentVideo.subtitles.map((subtitle) => ({ ...subtitle }))
+      const captions = currentVideo.captions.map((caption) => ({ ...caption }))
 
-      subtitles[subtitleIndex].start = start
+      captions[captionIndex].start = start
 
-      const previousUpdate = getUpdatesForPreviousSubtitles({
-        subtitleIndex,
-        subtitles,
+      const previousUpdate = getUpdatesForPreviousCaptions({
+        captionIndex,
+        captions,
       })
 
-      const nextUpdate = getUpdatesForNextSubtitles({
-        subtitleIndex,
-        subtitles,
+      const nextUpdate = getUpdatesForNextCaptions({
+        captionIndex,
+        captions,
       })
 
       const update = {
@@ -181,76 +181,76 @@ export const SubtitleTimeEditor: React.FC<SubtitleUpdateProps> = ({
       }
 
       const nextSong = JSON.parse(JSON.stringify(currentVideo))
-      const newSubtitles = [...nextSong.subtitles]
+      const newCaptions = [...nextSong.captions]
 
       for (const key of Object.keys(update)) {
         const index = Number(key)
-        newSubtitles[index] = update[index]
+        newCaptions[index] = update[index]
       }
 
-      seekTo((subtitles[subtitleIndex].start / 1000) * VIDEO_FPS)
+      seekTo((captions[captionIndex].start / 1000) * VIDEO_FPS)
 
       return {
         ...nextSong,
-        subtitles: newSubtitles,
+        captions: newCaptions,
       }
     })
   }
 
-  const updateSubtitleText = (subtitleIndex: number, text: string) => {
+  const updateCaptionText = (captionIndex: number, text: string) => {
     updateCurrentVideo((currentVideo: Video): Video => {
-      const newSubtitles = [...currentVideo.subtitles]
-      newSubtitles[subtitleIndex] = {
-        ...newSubtitles[subtitleIndex],
+      const newCaptions = [...currentVideo.captions]
+      newCaptions[captionIndex] = {
+        ...newCaptions[captionIndex],
         text,
       }
       return {
         ...currentVideo,
-        subtitles: newSubtitles,
+        captions: newCaptions,
       }
     })
   }
 
-  const mergeWithNextSubtitle = (subtitleIndex: number) => {
+  const mergeWithNextCaption = (captionIndex: number) => {
     updateCurrentVideo((currentVideo: Video): Video => {
-      const newSubtitles = [...currentVideo.subtitles]
-      const currentSubtitle = newSubtitles[subtitleIndex]
-      const nextSubtitle = newSubtitles[subtitleIndex + 1]
+      const newCaptions = [...currentVideo.captions]
+      const currentCaption = newCaptions[captionIndex]
+      const nextCaption = newCaptions[captionIndex + 1]
 
-      if (!nextSubtitle) {
+      if (!nextCaption) {
         return currentVideo
       }
 
-      const mergedText = `${currentSubtitle.text} ${nextSubtitle.text}`
+      const mergedText = `${currentCaption.text} ${nextCaption.text}`
 
       if (mergedText.length >= 12) {
         return currentVideo
       }
 
-      newSubtitles[subtitleIndex] = {
-        ...currentSubtitle,
+      newCaptions[captionIndex] = {
+        ...currentCaption,
         text: mergedText,
       }
 
-      newSubtitles.splice(subtitleIndex + 1, 1)
+      newCaptions.splice(captionIndex + 1, 1)
 
       return {
         ...currentVideo,
-        subtitles: newSubtitles,
+        captions: newCaptions,
       }
     })
   }
 
-  const updateSubtitleImages = (subtitleIndex: number, images: string) => {
+  const updateCaptionImages = (captionIndex: number, images: string) => {
     updateCurrentVideo((currentVideo: Video): Video => {
-      const newSubtitles = [...currentVideo.subtitles]
-      newSubtitles[subtitleIndex] = {
-        ...newSubtitles[subtitleIndex],
+      const newCaptions = [...currentVideo.captions]
+      newCaptions[captionIndex] = {
+        ...newCaptions[captionIndex],
         images: Math.max(Number(images), 0),
       }
       return {
         ...currentVideo,
-        subtitles: newSubtitles,
+        captions: newCaptions,
       }
     })
   }
@@ -264,12 +264,12 @@ export const SubtitleTimeEditor: React.FC<SubtitleUpdateProps> = ({
           return
         }
 
-        const currentSubtitle = video.subtitles.findIndex((subtitle: Subtitle) => {
-          return (subtitle.start / 1000) * framesPerSecond >= currentFrame
+        const currentCaption = video.captions.findIndex((caption: Caption) => {
+          return (caption.start / 1000) * framesPerSecond >= currentFrame
         })
 
-        if (currentSubtitle) {
-          setCurrentSub(currentSubtitle)
+        if (currentCaption) {
+          setCurrentSub(currentCaption)
         }
       },
       200,
@@ -277,13 +277,13 @@ export const SubtitleTimeEditor: React.FC<SubtitleUpdateProps> = ({
     return () => clearInterval(inter)
   }, [video, getCurrentFrame, isPlaying])
 
-  const deleteSubtitle = (itemIndex: number) => {
+  const deleteCaption = (itemIndex: number) => {
     updateCurrentVideo((currentVideo: Video): Video => {
-      const nextSubtitles = [...currentVideo.subtitles]
-      nextSubtitles.splice(itemIndex, 1)
+      const nextCaptions = [...currentVideo.captions]
+      nextCaptions.splice(itemIndex, 1)
       return {
         ...currentVideo,
-        subtitles: nextSubtitles,
+        captions: nextCaptions,
       }
     })
   }
@@ -295,25 +295,25 @@ export const SubtitleTimeEditor: React.FC<SubtitleUpdateProps> = ({
   return (
     <div className="flex flex-col w-[300px]">
       <div className="flex flex-row items-center flex-start mb-4">
-        <button type="button" className={`${styles.button} `} onClick={updateCurrentVideoSubtitlesWithImageCounts}>
+        <button type="button" className={`${styles.button} `} onClick={updateCurrentVideoCaptionsWithImageCounts}>
           Set image
         </button>
       </div>
       <div
-        ref={subtitleContainerRef}
+        ref={captionContainerRef}
         className="mb-4 px-2 py-2 overflow-y-auto h-[600px] border-2 border-gray-300 rounded-md bg-gray-100 w-[480px] pb-[500px]"
       >
-        {video.subtitles.map((subtitle, index) => {
+        {video.captions.map((caption, index) => {
           return (
             <div
-              key={subtitle.start}
-              id={`subtitle-${index}`}
+              key={caption.start}
+              id={`caption-${index}`}
               className={`flex flex-col mb-4 ${index < currentSubIndex ? 'bg-red-200' : ''} `}
             >
               <div className="flex items-center mb-4">
                 <button
                   type="button"
-                  onClick={() => deleteSubtitle(index)}
+                  onClick={() => deleteCaption(index)}
                   className="mr-1 text-2xl"
                 >
                   ❌
@@ -321,31 +321,31 @@ export const SubtitleTimeEditor: React.FC<SubtitleUpdateProps> = ({
                 <button
                   type="button"
                   className="mr-1 text-2xl"
-                  onClick={() => mergeWithNextSubtitle(index)}
+                  onClick={() => mergeWithNextCaption(index)}
                 >
                   ⬇️
                 </button>
                 <input
                   className={`w-[55px] ml-1 ${styles.input} mr-1`}
                   type="number"
-                  value={subtitle.images || 0}
+                  value={caption.images || 0}
                   onChange={(e) => {
-                    updateSubtitleImages(index, e.target.value)
+                    updateCaptionImages(index, e.target.value)
                   }}
                 />
 
                 <input
                   className={`w-[200px] ml-1 ${styles.input}`}
-                  value={subtitle.text}
+                  value={caption.text}
                   onChange={(e) => {
-                    updateSubtitleText(index, e.target.value)
+                    updateCaptionText(index, e.target.value)
                   }}
                 />
                 <button
                   type="button"
                   className=" mx-2 cursor-pointer text-2xl"
                   onClick={() => {
-                    seekTo(Math.max((subtitle.start / 1000), 0) * VIDEO_FPS)
+                    seekTo(Math.max((caption.start / 1000), 0) * VIDEO_FPS)
                   }}
                 >
                   ▶️
@@ -357,9 +357,9 @@ export const SubtitleTimeEditor: React.FC<SubtitleUpdateProps> = ({
                     marginRight: '10px',
                   }}
                   type="number"
-                  value={subtitle.start}
+                  value={caption.start}
                   onChange={(e) => {
-                    updateSubtitleStart(index, Number(e.target.value))
+                    updateCaptionstart(index, Number(e.target.value))
                   }}
                 />
 

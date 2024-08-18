@@ -2,13 +2,21 @@ import { Style } from '@/types/enums'
 
 export const getVideoDir = (videoName: string) => `./public/songs/${videoName}`
 
-export const getVideoFilePath = (videoName: string) => `${getVideoDir(videoName)}/video.mov`
+export const getMediaFilePath = (videoName: string, mediaType: 'audio' | 'video', extension: string ) => {
+  return `${getVideoDir(videoName)}/${mediaType}.${extension}`
+}
 
-export const getAudioFilePath = (videoName: string) => `${getVideoDir(videoName)}/audio.wav`
+export const getVideoFilePath = (videoName: string, extension: string = 'mov') => {
+  return getMediaFilePath(videoName, 'video', extension)
+}
 
-export const getSubtitlesFilePath = (videoName: string) => `${getVideoDir(videoName)}/subtitles.json`
+export const getAudioFilePath = (videoName: string, extension: string = 'mov') => {
+  return getMediaFilePath(videoName, 'video', extension)
+}
 
-export const getSubtitleAudioFilePath = (videoName: string, extension: string) => `${getVideoDir(videoName)}/subtitle_audio.${extension}`
+export const getCaptionsFilePath = (videoName: string) => `${getVideoDir(videoName)}/captions.json`
+
+export const getCaptionAudioFilePath = (videoName: string, extension: string) => `${getVideoDir(videoName)}/caption_audio.${extension}`
 
 export const getLyricsTxtPath = (videoName: string) => `${getVideoDir(videoName)}/lyrics.txt`
 
@@ -29,16 +37,16 @@ export const getStorybookImageDir = (
 export const getStorybookImagePath = (
   videoName: string,
   style: Style,
-  subtitleIndex: number,
+  captionIndex: number,
   imageIndex: number,
   version: string = '',
 ) => {
   const versionSuffix = version ? `-${version}` : ''
-  return `${getStorybookImageDir(videoName, style)}/${subtitleIndex}_${imageIndex}${versionSuffix}.png`
+  return `${getStorybookImageDir(videoName, style)}/${captionIndex}_${imageIndex}${versionSuffix}.png`
 }
 
-export const getSubtitleImageFileName = (subtitleIndex: number, imageIndex: number) => {
-  return `${subtitleIndex}_${imageIndex}`
+export const getCaptionImageFileName = (captionIndex: number, imageIndex: number) => {
+  return `${captionIndex}_${imageIndex}`
 }
 
 export const getVideoConfigPath = () => './public/video/config.json'

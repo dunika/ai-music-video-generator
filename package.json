@@ -29,6 +29,7 @@
     "filenamify": "^6.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "lodash": "^4.17.21",
+    "mime-types": "^2.1.35",
     "next": "14.0.3",
     "openai": "^4.25.0",
     "path-exists": "^5.0.0",
@@ -49,6 +50,8 @@
     "wavesurfer.js": "^7.7.14"
   },
   "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.25",
+    "@types/mime-types": "^2.1.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

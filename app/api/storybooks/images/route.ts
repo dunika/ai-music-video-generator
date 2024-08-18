@@ -63,8 +63,8 @@ export async function PUT(request: Request) {
   const {
     videoName,
     style,
-    subtitle,
-    subtitleIndex,
+    caption,
+    captionIndex,
     imageIndex,
     oldSubIndex,
     oldImageIndex,
@@ -72,7 +72,7 @@ export async function PUT(request: Request) {
   } = await request.json()
   if (typeof oldSubIndex !== 'undefined' && typeof oldImageIndex !== 'undefined') {
     console.log('Swapping images')
-    if (oldSubIndex === subtitleIndex && oldImageIndex === imageIndex) {
+    if (oldSubIndex === captionIndex && oldImageIndex === imageIndex) {
       return Response.json({
         success: true,
       })
@@ -87,7 +87,7 @@ export async function PUT(request: Request) {
     const newImagePath = getStorybookImagePath(
       videoName,
       style,
-      subtitleIndex,
+      captionIndex,
       imageIndex,
     )
 
@@ -117,7 +117,7 @@ export async function PUT(request: Request) {
   const storybookPages = await getStorybookJson(videoName)
 
   const pageIndex = storybookPages.findIndex((page) => {
-    return Object.keys(page)[0] === `${subtitleIndex}_${imageIndex}`
+    return Object.keys(page)[0] === `${captionIndex}_${imageIndex}`
   })
 
   const page = storybookPages[pageIndex]
@@ -134,7 +134,7 @@ export async function PUT(request: Request) {
     style,
     oldDescription,
     lyrics,
-    subtitle,
+    caption,
     negative,
   )
 
@@ -144,7 +144,7 @@ export async function PUT(request: Request) {
     images[0],
     style,
     videoName,
-    subtitleIndex,
+    captionIndex,
     imageIndex,
   )
 

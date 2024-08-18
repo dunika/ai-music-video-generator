@@ -9,10 +9,10 @@ import type {
 import {
   COMP_NAME,
 } from '@/constants'
-import { writeSubtitlesToFile } from '@/modules/videoFs'
+import { writeCaptionsToFile } from '@/modules/videoFs'
 import { VideoType } from '../../../../types/enums'
 
-const transparentSubtitleArgs = [
+const transparentCaptionArgs = [
   '--image-format',
   'png',
   '--pixel-format',
@@ -30,7 +30,7 @@ const transparentSubtitleArgs = [
 export async function POST(request: Request) {
   const config: VideoConfig = await request.json()
 
-  writeSubtitlesToFile(config.video)
+  writeCaptionsToFile(config.video)
 
   await fs.writeFile('./public/video/config.json', JSON.stringify(config, null, 2))
 
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
   const output = `${outputFolder}/${fileStem}.mov`
 
-  const args = config.videoType === VideoType.Subtitles ? transparentSubtitleArgs : []
+  const args = config.videoType === VideoType.Captions ? transparentCaptionArgs : []
 
   await execa('npx', [
     'remotion',

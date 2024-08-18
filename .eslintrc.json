@@ -9,6 +9,10 @@
     }
   ], 
   "rules": {
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-use-before-define": {
+      "functions": false,
+      "classes": false
+    }
   }
 }

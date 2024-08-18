@@ -1,1007 +1,642 @@
 {
   "video": {
-    "name": "doubling_down",
-    "subtitles": [
+    "name": "_funny",
+    "captions": [
       {
-        "start": 18400,
-        "text": "in my",
+        "text": "Been alive",
+        "start": 5800,
         "end": 0
       },
       {
-        "start": 19500,
-        "text": "head",
+        "text": "Everyday ",
+        "start": 6800,
         "end": 0
       },
       {
-        "start": 20600,
-        "text": "have",
+        "text": "of my life",
+        "start": 7400,
         "end": 0
       },
       {
-        "start": 21300,
-        "text": "enough",
+        "text": "With a hand",
+        "start": 8200,
         "end": 0
       },
       {
+        "text": "That can ",
+        "start": 8800,
+        "end": 0
+      },
+      {
+        "text": "pull me ",
+        "start": 9300,
+        "end": 0
+      },
+      {
+        "text": "through",
+        "start": 9900,
+        "end": 0
+      },
+      {
+        "text": "My blast",
+        "start": 11700,
+        "end": 0
+      },
+      {
+        "text": "From a ",
+        "start": 12400,
+        "end": 0
+      },
+      {
+        "text": "laughing ",
+        "start": 12800,
+        "end": 0
+      },
+      {
+        "text": "past",
+        "start": 13400,
+        "end": 0
+      },
+      {
+        "text": "In the ",
+        "start": 13700,
+        "end": 0
+      },
+      {
+        "text": "santa hat",
+        "start": 14200,
+        "end": 0
+      },
+      {
+        "text": "Playing ",
+        "start": 14900,
+        "end": 0
+      },
+      {
+        "text": "it cool",
+        "start": 15300,
+        "end": 0
+      },
+      {
+        "text": "That's you",
+        "start": 16100,
+        "end": 0
+      },
+      {
+        "text": "Long time",
+        "start": 17500,
+        "end": 0
+      },
+      {
+        "text": "It's been a",
+        "start": 18300,
+        "end": 0
+      },
+      {
+        "text": "a long while",
+        "start": 18800,
+        "end": 0
+      },
+      {
+        "text": "My dream",
+        "start": 19700,
+        "end": 0
+      },
+      {
+        "text": "team",
+        "start": 20300,
+        "end": 0
+      },
+      {
+        "text": "Grilling",
+        "start": 20700,
+        "end": 0
+      },
+      {
+        "text": "machine",
+        "start": 21200,
+        "end": 0
+      },
+      {
+        "text": "I got ",
         "start": 22700,
-        "text": "sick",
         "end": 0
       },
       {
-        "start": 23200,
-        "text": "of the",
+        "text": "the back",
+        "start": 23400,
         "end": 0
       },
       {
-        "start": 23800,
-        "text": "mess i'm",
+        "text": "and You got ",
+        "start": 24000,
         "end": 0
       },
       {
-        "start": 24800,
-        "text": "messin' in",
+        "text": "the back",
+        "start": 24900,
         "end": 0
       },
       {
-        "start": 27100,
-        "text": "in my",
+        "text": "oh baby",
+        "start": 25500,
         "end": 0
       },
       {
-        "start": 28100,
-        "text": "bed",
+        "text": "you best",
+        "start": 26100,
         "end": 0
       },
       {
-        "start": 29100,
-        "text": "fall in",
+        "text": "Believe",
+        "start": 26800,
         "end": 0
       },
       {
-        "start": 30200,
-        "text": "love",
+        "start": 27500,
+        "text": "it's gonna",
         "end": 0
       },
       {
-        "start": 31300,
-        "text": "i'm gonna",
+        "start": 28200,
+        "text": "be funny",
         "end": 0
       },
       {
-        "start": 32200,
-        "text": "make my",
+        "start": 30400,
+        "text": "it's gonna",
         "end": 0
       },
       {
-        "start": 33400,
-        "text": "medicine",
+        "start": 31100,
+        "text": "be funny",
         "end": 0
       },
       {
-        "start": 34400,
-        "text": "they",
+        "start": 33000,
+        "text": "it's gonna",
+        "end": 0
+      },
+      {
+        "start": 33800,
+        "text": "be funny",
         "end": 0
       },
       {
         "start": 34700,
-        "text": "said it",
+        "text": "funny",
         "end": 0
       },
       {
         "start": 35400,
-        "text": "they",
+        "text": "oh it's",
         "end": 0
       },
       {
-        "start": 35600,
-        "text": "said it",
+        "start": 36400,
+        "text": "gonna be",
         "end": 0
       },
       {
-        "start": 36500,
-        "text": "i listened",
+        "start": 36900,
+        "text": "funny",
         "end": 0
       },
       {
-        "start": 37300,
-        "text": "and i",
+        "start": 43100,
+        "text": "my god",
         "end": 0
       },
       {
-        "start": 37800,
-        "text": "read it",
+        "start": 44100,
+        "text": "forgot",
         "end": 0
       },
       {
-        "start": 38700,
-        "text": "forget the",
+        "start": 44400,
+        "text": "what",
         "end": 0
       },
       {
-        "start": 39400,
-        "text": "recommended",
+        "start": 44700,
+        "text": "that was",
         "end": 0
       },
       {
-        "start": 40600,
-        "text": "if you",
+        "start": 45500,
+        "text": "the love",
         "end": 0
       },
       {
-        "start": 41200,
-        "text": "live",
+        "start": 46100,
+        "text": "coming",
         "end": 0
       },
       {
-        "start": 41600,
-        "text": "another",
+        "start": 46300,
+        "text": "out of the",
         "end": 0
       },
       {
-        "start": 42100,
-        "text": "minute",
+        "start": 46900,
+        "text": "blue",
         "end": 0
       },
       {
-        "start": 42600,
-        "text": "don't",
+        "start": 48500,
+        "text": "lose my",
         "end": 0
       },
       {
-        "start": 43000,
-        "text": "regret it",
-        "end": 0
-      },
-      {
-        "start": 44000,
-        "text": "regret it",
-        "end": 0
-      },
-      {
-        "start": 45000,
-        "text": "if",
-        "end": 0
-      },
-      {
-        "start": 45300,
-        "text": "everybody",
-        "end": 0
-      },
-      {
-        "start": 46200,
-        "text": "says it",
-        "end": 0
-      },
-      {
-        "start": 47000,
-        "text": "it's a",
-        "end": 0
-      },
-      {
-        "start": 47600,
-        "text": "limit on",
-        "end": 0
-      },
-      {
-        "start": 48300,
-        "text": "your spirit",
-        "end": 0
-      },
-      {
-        "start": 48900,
-        "text": "better",
+        "start": 49100,
+        "text": "shoes",
         "end": 0
       },
       {
         "start": 49800,
-        "text": "wake up",
+        "text": "loose my",
         "end": 0
       },
       {
-        "start": 50600,
-        "text": "go and",
+        "start": 50400,
+        "text": "groove",
         "end": 0
       },
       {
-        "start": 51300,
-        "text": "get it",
+        "start": 51000,
+        "text": "we playin'",
         "end": 0
       },
       {
-        "start": 52200,
-        "text": "put my",
+        "start": 51700,
+        "text": "my favorite",
         "end": 0
       },
       {
-        "start": 52800,
-        "text": "head on",
+        "start": 52500,
+        "text": "tune",
         "end": 0
       },
       {
-        "start": 53700,
-        "text": "a cloud",
+        "start": 53100,
+        "text": "that's you",
         "end": 0
       },
       {
         "start": 54500,
-        "text": "in the",
+        "text": "daisy",
         "end": 0
       },
       {
-        "start": 55100,
-        "text": "fast",
+        "start": 55400,
+        "text": "pack up",
         "end": 0
       },
       {
-        "start": 55600,
-        "text": "lane",
+        "start": 56100,
+        "text": "the pack",
         "end": 0
       },
       {
-        "start": 57000,
-        "text": "this time",
+        "start": 56800,
+        "text": "sit back",
         "end": 0
       },
       {
-        "start": 57500,
-        "text": "i'm gonna",
+        "start": 57600,
+        "text": "relax",
         "end": 0
       },
       {
-        "start": 58100,
-        "text": "break off",
+        "start": 58300,
+        "text": "the cats",
         "end": 0
       },
       {
-        "start": 59100,
-        "text": "the last",
+        "start": 58900,
+        "text": "out the bag",
         "end": 0
       },
       {
-        "start": 59800,
-        "text": "chain",
+        "start": 59700,
+        "text": "and i got ",
         "end": 0
       },
       {
-        "start": 60800,
-        "text": "with a",
+        "start": 60700,
+        "text": "the back",
         "end": 0
       },
       {
-        "start": 61500,
-        "text": "heart",
+        "start": 61200,
+        "text": "and you got",
         "end": 0
       },
       {
         "start": 61900,
-        "text": "that's",
+        "text": "the back",
         "end": 0
       },
       {
-        "start": 62400,
-        "text": "relentlessly",
+        "start": 62500,
+        "text": "and we got",
         "end": 0
       },
       {
-        "start": 63500,
-        "text": "insane",
+        "start": 63600,
+        "text": "the back",
         "end": 0
       },
       {
-        "start": 65000,
-        "text": "here",
+        "start": 64000,
+        "text": "believe",
         "end": 0
       },
       {
-        "start": 65600,
-        "text": "i am",
+        "start": 64800,
+        "text": "it's gonna",
         "end": 0
       },
       {
-        "start": 66600,
-        "text": "and baby",
+        "start": 65200,
+        "text": "be funny",
         "end": 0
       },
       {
         "start": 67500,
-        "text": "i'm-a",
+        "text": "it's gonna",
         "end": 0
       },
       {
         "start": 68100,
-        "text": "doubling ",
+        "text": "be funny",
         "end": 0
       },
       {
-        "start": 69100,
-        "text": "down",
+        "start": 70500,
+        "text": "it's gonna",
         "end": 0
       },
       {
-        "start": 71300,
-        "text": "baby",
+        "start": 71100,
+        "text": "be funny",
         "end": 0
       },
       {
         "start": 71800,
-        "text": "i'm-a",
+        "text": "funny",
         "end": 0
       },
       {
-        "start": 72500,
-        "text": "doubling",
+        "start": 72900,
+        "text": "oh it's",
         "end": 0
       },
       {
-        "start": 73400,
-        "text": "down",
+        "start": 73600,
+        "text": " gonna be",
         "end": 0
       },
       {
-        "start": 78900,
-        "text": "guess",
+        "start": 74200,
+        "text": " funny",
         "end": 0
       },
       {
-        "start": 79300,
-        "text": "i'll try ",
+        "start": 76000,
+        "text": "it's gonna",
         "end": 0
       },
       {
-        "start": 80500,
-        "text": "to save",
+        "start": 76900,
+        "text": "be funny",
         "end": 0
       },
       {
-        "start": 81600,
-        "text": "the world",
+        "start": 78800,
+        "text": "it's gonna",
         "end": 0
       },
       {
-        "start": 83100,
-        "text": "be the",
+        "start": 79800,
+        "text": "be funny",
         "end": 0
       },
       {
-        "start": 84000,
-        "text": "change",
+        "start": 80000,
+        "text": "funny",
         "end": 0
       },
       {
-        "start": 84700,
-        "text": "I wanna",
+        "start": 80700,
+        "text": "funny",
         "end": 0
       },
       {
-        "start": 86000,
-        "text": "see",
+        "start": 82100,
+        "text": "funny",
         "end": 0
       },
       {
-        "start": 87600,
-        "text": "find the",
+        "start": 82300,
+        "text": "funny",
         "end": 0
       },
       {
-        "start": 88500,
-        "text": "diamonds",
+        "start": 86900,
+        "text": "never gonna",
         "end": 0
       },
       {
-        "start": 89600,
-        "text": "and the ",
+        "start": 88000,
+        "text": "let you",
+        "end": 0
+      },
+      {
+        "start": 89800,
+        "text": "never gonna",
         "end": 0
       },
       {
         "start": 90700,
-        "text": "pearls",
+        "text": "let you",
         "end": 0
       },
       {
-        "start": 92800,
-        "text": "deep inside ",
+        "start": 91400,
+        "text": "down",
         "end": 0
       },
       {
-        "start": 94400,
-        "text": "of me",
+        "start": 92200,
+        "text": "i do",
         "end": 0
       },
       {
-        "start": 94900,
-        "text": "they",
+        "start": 93200,
+        "text": "wanna see",
         "end": 0
       },
       {
-        "start": 95200,
-        "text": "said it",
+        "start": 94000,
+        "text": "the best-a",
         "end": 0
       },
       {
-        "start": 95900,
-        "text": "they",
+        "start": 94600,
+        "text": "you",
         "end": 0
       },
       {
-        "start": 96100,
-        "text": "said it",
+        "start": 98400,
+        "text": "never gonna",
         "end": 0
       },
       {
-        "start": 97000,
-        "text": "i listened",
+        "start": 99100,
+        "text": "let ya",
         "end": 0
       },
       {
-        "start": 97800,
-        "text": "and i",
+        "start": 101200,
+        "text": "never gonna",
         "end": 0
       },
       {
-        "start": 98300,
-        "text": "read it",
+        "start": 101900,
+        "text": "let",
         "end": 0
       },
       {
-        "start": 99200,
-        "text": "forget the",
-        "end": 0
-      },
-      {
-        "start": 99900,
-        "text": "recommended",
-        "end": 0
-      },
-      {
-        "start": 101100,
-        "text": "if you",
-        "end": 0
-      },
-      {
-        "start": 101700,
-        "text": "live",
-        "end": 0
-      },
-      {
-        "start": 102100,
-        "text": "another",
-        "end": 0
-      },
-      {
-        "start": 102600,
-        "text": "minute",
+        "start": 102400,
+        "text": "cause i",
         "end": 0
       },
       {
         "start": 103100,
-        "text": "don't",
+        "text": "got the",
         "end": 0
       },
       {
-        "start": 103500,
-        "text": "regret it",
+        "start": 103400,
+        "text": "back",
         "end": 0
       },
       {
-        "start": 104400,
-        "text": "regret it",
+        "start": 103900,
+        "text": "and you",
         "end": 0
       },
       {
-        "start": 105500,
-        "text": "if",
+        "start": 104600,
+        "text": "got the",
         "end": 0
       },
       {
-        "start": 105800,
-        "text": "everybody",
+        "start": 104900,
+        "text": "back",
         "end": 0
       },
       {
-        "start": 106800,
-        "text": "says it",
+        "start": 105300,
+        "text": "and we",
         "end": 0
       },
       {
-        "start": 107500,
-        "text": "it's a",
+        "start": 105700,
+        "text": "got the",
+        "end": 0
+      },
+      {
+        "start": 106300,
+        "text": "back",
+        "end": 0
+      },
+      {
+        "start": 106700,
+        "text": "believe",
+        "end": 0
+      },
+      {
+        "start": 107600,
+        "text": "it's gonna",
         "end": 0
       },
       {
         "start": 108100,
-        "text": "limit on",
+        "text": "be funny",
         "end": 0
       },
       {
-        "start": 108800,
-        "text": "your spirit",
+        "start": 110500,
+        "text": "it's gonna",
         "end": 0
       },
       {
-        "start": 109500,
-        "text": "better",
+        "start": 110900,
+        "text": "be funny",
         "end": 0
       },
       {
-        "start": 110300,
-        "text": "wake up",
+        "start": 116000,
+        "text": "oh it's",
         "end": 0
       },
       {
-        "start": 111100,
-        "text": "go and",
+        "start": 116400,
+        "text": "gonna be",
         "end": 0
       },
       {
-        "start": 111800,
-        "text": "get it",
+        "start": 116900,
+        "text": "funny",
         "end": 0
       },
       {
-        "start": 112700,
-        "text": "put my",
+        "start": 118800,
+        "text": "it's gonna",
         "end": 0
       },
       {
-        "start": 113600,
-        "text": "head on",
+        "start": 119500,
+        "text": "be funny",
         "end": 0
       },
       {
-        "start": 114400,
-        "text": "a cloud",
+        "start": 123900,
+        "text": "oh it's",
         "end": 0
       },
       {
-        "start": 115200,
-        "text": "in the",
-        "end": 0
-      },
-      {
-        "start": 115800,
-        "text": "fast",
-        "end": 0
-      },
-      {
-        "start": 116200,
-        "text": "lane",
-        "end": 0
-      },
-      {
-        "start": 117600,
-        "text": "this time",
-        "end": 0
-      },
-      {
-        "start": 118200,
-        "text": "i'm gonna",
-        "end": 0
-      },
-      {
-        "start": 118900,
-        "text": "break off",
-        "end": 0
-      },
-      {
-        "start": 119800,
-        "text": "the last",
-        "end": 0
-      },
-      {
-        "start": 120600,
-        "text": "chain",
-        "end": 0
-      },
-      {
-        "start": 121400,
-        "text": "with a",
-        "end": 0
-      },
-      {
-        "start": 122200,
-        "text": "heart",
-        "end": 0
-      },
-      {
-        "start": 122700,
-        "text": "that's",
-        "end": 0
-      },
-      {
-        "start": 123300,
-        "text": "relentlessly",
-        "end": 0
-      },
-      {
-        "start": 124300,
-        "text": "insane",
+        "start": 125000,
+        "text": "gonna be",
         "end": 0
       },
       {
         "start": 125600,
-        "text": "here",
+        "text": "funny",
         "end": 0
       },
       {
-        "start": 126300,
-        "text": "i am",
-        "end": 0
-      },
-      {
-        "start": 127300,
-        "text": "and baby",
-        "end": 0
-      },
-      {
-        "start": 128100,
-        "text": "i'm-a",
-        "end": 0
-      },
-      {
-        "start": 128700,
-        "text": "doubling ",
-        "end": 0
-      },
-      {
-        "start": 129800,
-        "text": "down",
-        "end": 0
-      },
-      {
-        "start": 132000,
-        "text": "baby",
+        "start": 126200,
+        "text": "it's gonna",
         "end": 0
       },
       {
         "start": 132500,
-        "text": "i'm-a",
+        "text": "funnnnnnny",
         "end": 0
       },
       {
-        "start": 133000,
-        "text": "doubling",
-        "end": 0
-      },
-      {
-        "start": 134000,
-        "text": "down",
-        "end": 0
-      },
-      {
-        "start": 136200,
-        "text": "baby",
-        "end": 0
-      },
-      {
-        "start": 136900,
-        "text": "i'm-a",
-        "end": 0
-      },
-      {
-        "start": 137200,
-        "text": "doubling",
-        "end": 0
-      },
-      {
-        "start": 138500,
-        "text": "fade in",
-        "end": 0
-      },
-      {
-        "start": 140500,
-        "text": "fade out",
-        "end": 0
-      },
-      {
-        "start": 142600,
-        "text": "red",
-        "end": 0
-      },
-      {
-        "start": 143500,
-        "text": "light",
-        "end": 0
-      },
-      {
-        "start": 144800,
-        "text": "green",
-        "end": 0
-      },
-      {
-        "start": 145800,
-        "text": "now",
-        "end": 0
-      },
-      {
-        "start": 147100,
-        "text": "fade in",
-        "end": 0
-      },
-      {
-        "start": 149100,
-        "text": "fade out",
-        "end": 0
-      },
-      {
-        "start": 151200,
-        "text": "you won't",
-        "end": 0
-      },
-      {
-        "start": 151700,
-        "text": "know",
-        "end": 0
-      },
-      {
-        "start": 152200,
-        "text": "nothing",
-        "end": 0
-      },
-      {
-        "start": 153000,
-        "text": "if you",
-        "end": 0
-      },
-      {
-        "start": 153300,
-        "text": "can't let",
-        "end": 0
-      },
-      {
-        "start": 154200,
-        "text": "the fear",
-        "end": 0
-      },
-      {
-        "start": 154900,
-        "text": "go",
-        "end": 0
-      },
-      {
-        "start": 156000,
-        "text": "put my",
-        "end": 0
-      },
-      {
-        "start": 156800,
-        "text": "head on",
-        "end": 0
-      },
-      {
-        "start": 157600,
-        "text": "a cloud",
-        "end": 0
-      },
-      {
-        "start": 158400,
-        "text": "in the",
-        "end": 0
-      },
-      {
-        "start": 159100,
-        "text": "fast",
-        "end": 0
-      },
-      {
-        "start": 159600,
-        "text": "lane",
-        "end": 0
-      },
-      {
-        "start": 160900,
-        "text": "this time",
-        "end": 0
-      },
-      {
-        "start": 161500,
-        "text": "i'm gonna",
-        "end": 0
-      },
-      {
-        "start": 162100,
-        "text": "break off",
-        "end": 0
-      },
-      {
-        "start": 163100,
-        "text": "the last",
-        "end": 0
-      },
-      {
-        "start": 163800,
-        "text": "chain",
-        "end": 0
-      },
-      {
-        "start": 164700,
-        "text": "with a",
-        "end": 0
-      },
-      {
-        "start": 165500,
-        "text": "heart",
-        "end": 0
-      },
-      {
-        "start": 165900,
-        "text": "that's",
-        "end": 0
-      },
-      {
-        "start": 166400,
-        "text": "relentlessly",
-        "end": 0
-      },
-      {
-        "start": 167500,
-        "text": "insane",
-        "end": 0
-      },
-      {
-        "start": 168800,
-        "text": "here",
-        "end": 0
-      },
-      {
-        "start": 169500,
-        "text": "i am",
-        "end": 0
-      },
-      {
-        "start": 170600,
-        "text": "and baby",
-        "end": 0
-      },
-      {
-        "start": 171400,
-        "text": "i'm-a",
-        "end": 0
-      },
-      {
-        "start": 172000,
-        "text": "doubling ",
-        "end": 0
-      },
-      {
-        "start": 173000,
-        "text": "down",
-        "end": 0
-      },
-      {
-        "start": 175300,
-        "text": "baby",
-        "end": 0
-      },
-      {
-        "start": 175800,
-        "text": "i'm-a",
-        "end": 0
-      },
-      {
-        "start": 176500,
-        "text": "doubling",
-        "end": 0
-      },
-      {
-        "start": 177400,
-        "text": "down",
-        "end": 0
-      },
-      {
-        "start": 179500,
-        "text": "baby",
-        "end": 0
-      },
-      {
-        "start": 179900,
-        "text": "i'm-a",
-        "end": 0
-      },
-      {
-        "start": 180500,
-        "text": "doubling",
-        "end": 0
-      },
-      {
-        "start": 181900,
-        "text": "with a",
-        "end": 0
-      },
-      {
-        "start": 182600,
-        "text": "heart",
-        "end": 0
-      },
-      {
-        "start": 183100,
-        "text": "that's",
-        "end": 0
-      },
-      {
-        "start": 183500,
-        "text": "relentlessly",
-        "end": 0
-      },
-      {
-        "start": 184600,
-        "text": "insane",
-        "end": 0
-      },
-      {
-        "start": 186100,
-        "text": "here",
-        "end": 0
-      },
-      {
-        "start": 186600,
-        "text": "i am",
-        "end": 0
-      },
-      {
-        "start": 187700,
-        "text": "and baby",
-        "end": 0
-      },
-      {
-        "start": 188500,
-        "text": "i'm-a",
-        "end": 0
-      },
-      {
-        "start": 189100,
-        "text": "doubling",
-        "end": 0
-      },
-      {
-        "start": 190200,
-        "text": "down",
-        "end": 0
-      },
-      {
-        "start": 192200,
-        "text": "baby",
-        "end": 0
-      },
-      {
-        "start": 192700,
-        "text": "i'm-a",
-        "end": 0
-      },
-      {
-        "start": 193600,
-        "text": "doubling",
-        "end": 0
-      },
-      {
-        "start": 194500,
-        "text": "down",
-        "end": 0
-      },
-      {
-        "start": 196600,
-        "text": "baby",
-        "end": 0
-      },
-      {
-        "start": 197100,
-        "text": "i'm-a",
-        "end": 0
-      },
-      {
-        "start": 197800,
-        "text": "doubling",
-        "end": 0
-      },
-      {
-        "start": 198800,
-        "text": "down",
+        "start": 134400,
+        "text": "you get the idea",
         "end": 0
       }
     ]
   },
-  "title": "Doubling Down",
-  "subtitle": "Basil Breen",
-  "videoType": "subtitles",
+  "title": " Funny",
+  "caption": "Basil Breen",
+  "videoType": "captions",
   "storybookPageStyle": null,
   "imageVersion": 0
 }

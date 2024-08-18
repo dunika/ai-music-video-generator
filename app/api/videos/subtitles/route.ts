@@ -1,16 +1,16 @@
 import type { Video } from '@/types'
 
-import { writeSubtitlesToFile } from '@/modules/videoFs'
+import { writeCaptionsToFile } from '@/modules/videoFs'
 
 export async function POST(request: Request) {
   const {
     name,
-    subtitles,
+    captions: captions,
   } = await request.json() as Video
 
-  await writeSubtitlesToFile({
+  await writeCaptionsToFile({
     name,
-    subtitles,
+    captions: captions,
   })
 
   return Response.json({ success: true })
