@@ -1,6 +1,6 @@
 import { Style } from '@/types/enums'
 
-export const getVideoDir = (videoName: string) => `./public/songs/${videoName}`
+export const getVideoDir = (videoName: string) => `./public/videos/${videoName}`
 
 export const getMediaFilePath = (videoName: string, mediaType: 'audio' | 'video', extension: string ) => {
   return `${getVideoDir(videoName)}/${mediaType}.${extension}`

@@ -13,9 +13,9 @@ const uuid = () => {
 }
 
 const getJsonCaptions = async (): Promise<Video[]> => {
-  const dirPath = './public/songs'
-  const videoNames = await fs.readdir('./public/songs')
-  const songs = []
+  const dirPath = './public/videos'
+  const videoNames = await fs.readdir('./public/videos')
+  const videos = []
   for (const videoName of videoNames) {
     const videoNamePath = path.join(dirPath, videoName)
     const fileStat = await fs.stat(videoNamePath)
@@ -33,7 +33,7 @@ const getJsonCaptions = async (): Promise<Video[]> => {
       }
     })
 
-    songs.push({
+    videos.push({
       name: videoName,
       captions,
       modifiedTime: fileStat.mtime,
@@ -41,9 +41,9 @@ const getJsonCaptions = async (): Promise<Video[]> => {
     })
   }
 
-  songs.sort((a, b) => b.modifiedTime.getTime() - a.modifiedTime.getTime())
+  videos.sort((a, b) => b.modifiedTime.getTime() - a.modifiedTime.getTime())
 
-  return songs.map(({ modifiedTime, ...rest }) => rest)
+  return videos.map(({ modifiedTime, ...rest }) => rest)
 }
 
 const addTextCaptions = async () => {
@@ -69,7 +69,7 @@ const addTextCaptions = async () => {
       }
     })
 
-    // write files to './public/songs'
+    // write files to './public/videos'
     const videoName = file.replace(/\.txt$/, '')
 
     const newPath = getCaptionsFilePath(videoName)

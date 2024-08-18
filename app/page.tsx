@@ -17,6 +17,7 @@ import {
 import {
   QueryClient,
   QueryClientProvider,
+  useQuery,
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import type { NextPage } from 'next'
@@ -33,12 +34,13 @@ import {
   VIDEO_HEIGHT,
   VIDEO_WIDTH,
 } from '../constants'
-
+import ky from 'ky-universal'
 import {
   Style,
   VideoType,
 } from '../types/enums'
 import styles from './styles'
+import Link from 'next/link'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -121,23 +123,28 @@ function CurrentVideosSelector() {
   }]
 
   return (
-    <select
-      className={`${styles.input} w-full mb-4`}
-      value={currentVideoId ?? ''}
-      onChange={(e) => setCurrentVideoId(e.target.value)}
-    >
-      {options.map((video) => {
-        const id = video.name
-        return (
-          <option
-            key={id}
-            value={id}
-          >
-            {id}
-          </option>
-        )
-      })}
-    </select>
+    <div className="flex justify-center items-center mb-4">
+      <select
+        className={`${styles.input} w-full`}
+        value={currentVideoId ?? ''}
+        onChange={(e) => setCurrentVideoId(e.target.value)}
+      >
+        {options.map((video) => {
+          const id = video.name
+          return (
+            <option
+              key={id}
+              value={id}
+            >
+              {id}
+            </option>
+          )
+        })}
+      </select>
+      <Link href={'/overdub'} className={`${styles.button} ml-2 whitespace-nowrap`}>
+        Add Video
+      </Link>
+    </div>
   )
 }
 
@@ -627,12 +634,11 @@ function Page() {
 
   const {
     data: durationInFrames,
-  } = useSuspenseQuery({
+  } = useQuery({
     initialData: 0,
     queryKey: ['videoDuration', currentVideo?.name, videoDetail.videoType],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/api/videos/duration?videoName=${currentVideo?.name}&videoType=${videoDetail.videoType}`)
-      return response.json()
+      return ky.get(`http://localhost:3000/api/videos/duration?videoName=${currentVideo?.name}&videoType=${videoDetail.videoType}`).json()
     },
   })
   const videoConfig: VideoConfig = {
@@ -646,6 +652,8 @@ function Page() {
     storybookPageStyle,
     imageVersion,
   }
+
+  console.log({durationInFrames})
 
   const [slowMo, setSlowMo] = useState(false)
 
@@ -682,7 +690,7 @@ function Page() {
         <div className="w-[512px] p-4">
           <Suspense fallback={<div>Loading...</div>}>
             <VideoDetailEditor />
-            <Storybooks videoName={currentVideo?.name ?? ''} />
+            {/* <Storybooks videoName={currentVideo?.name ?? ''} /> */}
           </Suspense>
         </div>
         {!!durationInFrames && (

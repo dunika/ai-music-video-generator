@@ -9,6 +9,8 @@ import React, {
 import useAudioPlaybackRecorder from './media-recorder-hooks/src/useAudioPlaybackRecorder'
 import useDecibelMonitor from './media-recorder-hooks/src/useDecibelMonitor'
 import useMediaDevices from './media-recorder-hooks/src/useMediaDevices'
+import ky from 'ky-universal'
+import styles from '../styles'
 
 
 const upload = async (fileToTranscribe: File, videoName: string, file: File) => {
@@ -17,11 +19,18 @@ const upload = async (fileToTranscribe: File, videoName: string, file: File) => 
   formData.append('fileToTranscribe', fileToTranscribe)
   formData.append('videoName', videoName)
   formData.append('file', file)
+  
+  try {
+    await ky('/api/videos/captions/transcribe', {
+      method: 'POST',
+      body: formData,
+    })
+    // go to /
+    window.location.href = '/'
+  } catch (e) {
+    alert(e)
+  }
 
-  await fetch('/api/videos/captions/transcribe', {
-    method: 'POST',
-    body: formData,
-  })
 }
 
 const downloadBlob = (blob: Blob, filename: string) => {
@@ -158,7 +167,7 @@ const Overdub: NextPage = () => {
       />
       <br />
       <h3>File Name</h3>
-      <input type="text" onChange={(e) => setVideoName(e.target.value)} value={videoName} />
+      <input type="text" onChange={(e) => setVideoName(e.target.value)} value={videoName} className={styles.input}/>
       <br />
       <button onClick={controls.start}>Start</button>
       <br />

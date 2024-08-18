@@ -9,7 +9,7 @@ import { getMediaDuration } from '@/modules/ffmpeg'
 
 export async function GET(request: Request) {
   // get from query
-  // http://localhost:3000/api/video?songName=public&segmentName=songs&videoType=storybook
+  // http://localhost:3000/api/video?songName=public&segmentName=videos&videoType=storybook
   const { searchParams } = new URL(request.url)
   const {
     videoName,
