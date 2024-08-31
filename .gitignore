@@ -40,7 +40,12 @@ next-env.d.ts
 *.mp4
 *.wav
 output
-public/songs/**/*.png
+public/videos/**/*.png
 
 public/Montserrat
-public/songs
+public/videos
+
+venv
+
+
+rust/rust_audio_player/target

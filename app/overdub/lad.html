@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Audio with Device Selection</title>
+</head>
+<body>
+
+    <h1>Record Audio with Device Selection using RecordRTC</h1>
+
+    <label for="audioSource">Select Audio Input Device:</label>
+    <select id="audioSource"></select>
+    <br><br>
+
+    <button id="start-recording">Start Recording</button>
+    <button id="stop-recording" disabled>Stop Recording</button>
+    <br><br>
+
+    <audio controls id="audio-playback" style="display: none;"></audio>
+    <br><br>
+
+    <a id="download-link" href="#" style="display: none;">Download Recording</a>
+
+    <!-- Include RecordRTC library -->
+    <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
+
+    <script>
+        let recorder;  // To store the RecordRTC object
+        let audioBlob; // To store the recorded audio Blob
+        let stream;    // To store the media stream
+
+        const audioSourceSelect = document.getElementById('audioSource');
+        const startButton = document.getElementById('start-recording');
+        const stopButton = document.getElementById('stop-recording');
+        const audioPlayback = document.getElementById('audio-playback');
+        const downloadLink = document.getElementById('download-link');
+
+        // Function to populate audio input devices in the dropdown
+        async function getAudioDevices() {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            console.log({devices});
+            const audioDevices = devices.filter(device => device.kind === 'audioinput');
+
+            // Clear the existing options
+            audioSourceSelect.innerHTML = '';
+
+            // Populate the select element with available audio input devices
+            audioDevices.forEach(device => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                option.text = device.label || `Microphone ${audioSourceSelect.length + 1}`;
+                audioSourceSelect.appendChild(option);
+            });
+        }
+
+        // Call getAudioDevices to populate the dropdown
+        getAudioDevices();
+
+        startButton.addEventListener('click', async () => {
+            const selectedDeviceId = audioSourceSelect.value;
+
+            // Request microphone access with the selected device
+            stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    deviceId: selectedDeviceId ? { exact: selectedDeviceId } : undefined
+                }
+            });
+
+            // Create a new instance of RecordRTC for audio recording
+            recorder = new RecordRTC(stream, {
+                type: 'audio',
+                mimeType: 'audio/webm', // You can change the format if needed
+                bitsPerSecond: 128000  // Audio quality (optional)
+            });
+
+            // Start recording
+            recorder.startRecording();
+
+            // Update button states
+            startButton.disabled = true;
+            stopButton.disabled = false;
+        });
+
+        stopButton.addEventListener('click', () => {
+            // Stop the recording
+            recorder.stopRecording(() => {
+                // Get the audio Blob
+                audioBlob = recorder.getBlob();
+
+                // Create a URL for the audio Blob and display it in the audio player
+                const audioURL = URL.createObjectURL(audioBlob);
+                audioPlayback.src = audioURL;
+                audioPlayback.style.display = 'block';
+
+                // Create a download link for the audio Blob
+                downloadLink.href = audioURL;
+                downloadLink.download = 'recording.webm'; // You can set the file name here
+                downloadLink.style.display = 'block';
+            });
+
+            // Stop the media stream tracks to release the microphone
+            stream.getTracks().forEach(track => track.stop());
+
+            // Update button states
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        });
+    </script>
+</body>
+</html>

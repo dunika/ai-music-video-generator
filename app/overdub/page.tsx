@@ -11,6 +11,8 @@ import useDecibelMonitor from './media-recorder-hooks/src/useDecibelMonitor'
 import useMediaDevices from './media-recorder-hooks/src/useMediaDevices'
 import ky from 'ky-universal'
 import styles from '../styles'
+import useFFmpeg from './useFfmpeg'
+import { playAudio} from '../../rust/player'
 
 
 const upload = async (fileToTranscribe: File, videoName: string, file: File) => {
@@ -68,6 +70,7 @@ const AudioDeviceSelector: React.FC<{
 }
 
 const Overdub: NextPage = () => {
+  const ffmpeg = useFFmpeg()
   const [file, setFile] = useState<File | null>(null)
   const [videoName, setVideoName] = useState<string>('')
 
@@ -75,6 +78,7 @@ const Overdub: NextPage = () => {
   const [audioInputDeviceId, setAudioInputDeviceId] = useState<string>('default')
 
   const { devices } = useMediaDevices()
+
   const audioSrcAndFormat = useMemo(() => {
     if (!file) {
       return {
@@ -94,12 +98,29 @@ const Overdub: NextPage = () => {
   useEffect(() => {
     if (file) {
       setVideoName(file.name.split('.')[0])
+      const lad = async () => {
+      const mp3Data = await ffmpeg.transcode(file)
+debugger
+      // Create a Blob from the Uint8Array
+      const blob = new Blob([mp3Data], { type: 'audio/mpeg' });
+      
+      // Generate an object URL from the Blob
+      const url = URL.createObjectURL(blob);
+      
+      // Create a new Audio element
+      playAudio(mp3Data.buffer)
+      const audio = new Audio(url);
+      
+      // Play the audio
+      audio.play();
+      }
+      lad()
+
     }
   }, [file])
 
   const {
     controls,
-    blob,
     error,
     state,
     stream,
@@ -109,10 +130,17 @@ const Overdub: NextPage = () => {
     outputDeviceId: audioInputDeviceId,
     // recordingFormat: 'audio/webm;codecs=opus',
     onFinished: (blob) => {
+      if (!blob) {
+        return alert('No blob')
+      }
+debugger
+      if (!file) {
+        return alert('No file')
+      }
+
       const uploadFile = new File([blob], `${file?.name ?? 'file'}.webm`)
 
       upload(uploadFile, videoName, file)
-      // downloadBlob(blob, `overdub.${AudioMediaExtension.Mp3}`)
 
       downloadBlob(blob, 'overdub.webm')
     },
@@ -181,7 +209,11 @@ const Overdub: NextPage = () => {
         <input
           type="file"
           onChange={(e) => {
-            return upload(e.target.files[0])
+            const fileToTranscribe = e.target.files?.[0]
+            if (!fileToTranscribe) {
+              return
+            }
+            return upload(fileToTranscribe, videoName, file)
           }}
           placeholder="Manually add audio transcription"
         />

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFmpeg WASM File Conversion</title>
+</head>
+<body>
+    <h1>Convert File to Buffer using FFmpeg.wasm</h1>
+    <input type="file" id="fileInput" />
+    <button id="convertButton">Convert</button>
+    <pre id="output"></pre>
+
+    <script type="module">
+        
+        const load = async () => {
+            const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd'
+            const ffmpeg = ffmpegRef.current;
+            ffmpeg.on('log', ({ message }) => {
+                messageRef.current.innerHTML = message;
+                console.log(message);
+            });
+            // toBlobURL is used to bypass CORS issue, urls with the same
+            // domain can be used directly.
+            await ffmpeg.load({
+                coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+                wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+            });
+        }
+
+        const ffmpeg = createFFmpeg({ log: true });
+
+        async function convertFileToBuffer(inputFile) {
+            // Load the ffmpeg.wasm core
+            if (!ffmpeg.isLoaded()) {
+                await ffmpeg.load();
+            }
+
+            // Load the input file into ffmpeg's virtual file system
+            ffmpeg.FS('writeFile', 'inputFile', await fetchFile(inputFile));
+
+            // Run the ffmpeg command to convert the file
+            await ffmpeg.run('-i', 'inputFile', 'outputFile');
+
+            // Read the output file into a buffer
+            const data = ffmpeg.FS('readFile', 'outputFile');
+
+            // Return the buffer
+            return data;
+        }
+
+        document.getElementById('convertButton').addEventListener('click', async () => {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file.');
+                return;
+            }
+
+            const outputBuffer = await convertFileToBuffer(file);
+            debugger
+            document.getElementById('output').textContent = `Output Buffer: ${outputBuffer}`;
+        });
+    </script>
+</body>
