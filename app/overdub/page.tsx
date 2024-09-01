@@ -4,20 +4,17 @@ import { NextPage } from 'next/types'
 import React, {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
-import useAudioPlaybackRecorder from './media-recorder-hooks/src/useAudioPlaybackRecorder'
-import useDecibelMonitor from './media-recorder-hooks/src/useDecibelMonitor'
-import useMediaDevices from './media-recorder-hooks/src/useMediaDevices'
+import { useAudioPlaybackRecorder, useAudioRecorder, useDecibelMonitor, useMediaDevices } from '@dunika/media-recorder-hooks'
 import ky from 'ky-universal'
 import styles from '../styles'
-import useFFmpeg from './useFfmpeg'
-import { playAudio} from '../../rust/player'
 
 
 const upload = async (fileToTranscribe: File, videoName: string, file: File) => {
   const formData = new FormData()
-
+debugger
   formData.append('fileToTranscribe', fileToTranscribe)
   formData.append('videoName', videoName)
   formData.append('file', file)
@@ -70,7 +67,16 @@ const AudioDeviceSelector: React.FC<{
 }
 
 const Overdub: NextPage = () => {
-  const ffmpeg = useFFmpeg()
+  const [videoSrc, setVideoSrc] = useState<string | null>(null)
+
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current?.play();
+    }
+  }, []);
+
   const [file, setFile] = useState<File | null>(null)
   const [videoName, setVideoName] = useState<string>('')
 
@@ -98,24 +104,8 @@ const Overdub: NextPage = () => {
   useEffect(() => {
     if (file) {
       setVideoName(file.name.split('.')[0])
-      const lad = async () => {
-      const mp3Data = await ffmpeg.transcode(file)
-debugger
-      // Create a Blob from the Uint8Array
-      const blob = new Blob([mp3Data], { type: 'audio/mpeg' });
-      
-      // Generate an object URL from the Blob
-      const url = URL.createObjectURL(blob);
-      
-      // Create a new Audio element
-      playAudio(mp3Data.buffer)
-      const audio = new Audio(url);
-      
-      // Play the audio
-      audio.play();
-      }
-      lad()
-
+      const videoURL = URL.createObjectURL(file)
+      setVideoSrc(videoURL)
     }
   }, [file])
 
@@ -124,16 +114,15 @@ debugger
     error,
     state,
     stream,
-  } = useAudioPlaybackRecorder({
+  } = useAudioRecorder({
     ...audioSrcAndFormat,
-    inputDeviceId: audioDeviceId,
-    outputDeviceId: audioInputDeviceId,
+    deviceId: audioDeviceId,
+    // outputDeviceId: audioInputDeviceId,
     // recordingFormat: 'audio/webm;codecs=opus',
     onFinished: (blob) => {
       if (!blob) {
         return alert('No blob')
       }
-debugger
       if (!file) {
         return alert('No file')
       }
@@ -147,10 +136,6 @@ debugger
   })
 
   const d = useDecibelMonitor({ stream })
-
-  const download = () => {
-    downloadBlob(new Blob(blob, { type: 'audio/webm;codecs=opus' }), 'overdub.webm')
-  }
 
   useEffect(() => {
     if (error) {
@@ -197,18 +182,28 @@ debugger
       <h3>File Name</h3>
       <input type="text" onChange={(e) => setVideoName(e.target.value)} value={videoName} className={styles.input}/>
       <br />
-      <button onClick={controls.start}>Start</button>
+      <button onClick={() => {
+        controls.start()
+        if (videoRef.current) {
+          videoRef.current?.play();
+        }
+      }}>Start</button>
       <br />
       <button onClick={controls.stop}>Stop</button>
       <br />
       <button onClick={state === 'paused' ? controls.resume : controls.pause}>{state === 'paused' ? 'Resume' : 'Pause'}</button>
       <br />
-      <button onClick={download}>Download</button>
       <br />
+      {videoSrc && (
+     <video controls width="320" height="240" ref={videoRef}>
+     <source src={videoSrc} type="video/mp4" />
+   </video>
+      )}
       <div className="">
         <input
           type="file"
           onChange={(e) => {
+            debugger
             const fileToTranscribe = e.target.files?.[0]
             if (!fileToTranscribe) {
               return

@@ -6,6 +6,7 @@ import {
   VIDEO_FPS,
 } from '@/constants'
 import { getMediaDuration } from '@/modules/ffmpeg'
+import { findMediaFilePath } from '@/modules/videoFs'
 
 export async function GET(request: Request) {
   // get from query
@@ -14,39 +15,47 @@ export async function GET(request: Request) {
   const {
     videoName,
   } = Object.fromEntries(searchParams.entries())
-  const audioFilePath = getAudioFilePath(videoName)
-  const videoFilePath = getVideoFilePath(videoName)
+  const audioFilePath = await findMediaFilePath(videoName, 'audio')
+  const videoFilePath = await findMediaFilePath(videoName, 'video')
 
   const [
     audioDurationResult,
     videoDurationResult,
   ] = await Promise.allSettled([
-    getMediaDuration(audioFilePath),
     getMediaDuration(videoFilePath),
+    getMediaDuration(audioFilePath),
   ])
 
+  const hasError = [videoDurationResult, audioDurationResult]
+    .every((result) => result.status === 'rejected')
 
-  const hasAudioDuration = audioDurationResult.status === 'fulfilled'
-  const hasVideoDuration = videoDurationResult.status === 'fulfilled'
-
-  if (!hasAudioDuration && !hasVideoDuration) {
+  if (hasError) {
     return Response.json({
-      error: audioDurationResult.reason || videoDurationResult.reason,
+      error: 'Error getting duration',
     }, {
       status: 500,
     })
   }
 
-  if (hasAudioDuration) {
-    return Response.json(getDurationInFrames(audioDurationResult.value))
+  const result = [videoDurationResult, audioDurationResult]
+    .find((result) => result.status === 'fulfilled')
+
+  if (!result) {
+    return Response.json({
+      error: 'No duration found',
+    }, {
+      status: 500,
+    })
   }
 
-  if (hasVideoDuration) {
-    return Response.json(getDurationInFrames(videoDurationResult.value))
-  }
+    return Response.json({
+      data: getDurationInFrames(result.value)
+    })
+
+  
 }
 
 
-const getDurationInFrames = async (mediaDuration: number) => {
+const getDurationInFrames = (mediaDuration: number) => {
   return Math.floor(mediaDuration * VIDEO_FPS)
 }

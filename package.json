@@ -10,6 +10,7 @@
     "start-video": "remotion preview ./remotion/index.tsx"
   },
   "dependencies": {
+    "@dunika/media-recorder-hooks": "*",
     "@deepgram/sdk": "^3.3.3",
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@ffmpeg/util": "^0.12.1",

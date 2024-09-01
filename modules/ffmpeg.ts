@@ -1,13 +1,13 @@
 import ffmpeg from 'fluent-ffmpeg'
 import { Readable } from 'stream';
-import mime from 'mime-types';
 
 
-export async function getFileBufferMediaInfo(buffer: Buffer): Promise<{ mediaType: 'video' | 'audio'; mimeType: string; extension: string }> {
+export async function getFileBufferMediaType(buffer: Buffer): Promise<'video' | 'audio'> {
   return new Promise((resolve, reject) => {
     try {
       const stream = convertBufferToStream(buffer);
       ffmpeg(stream).ffprobe((error, data) => {
+        debugger
         if (error) {
           console.error('Error reading file metadata:', error);
           reject('Error reading file metadata');
@@ -19,27 +19,13 @@ export async function getFileBufferMediaInfo(buffer: Buffer): Promise<{ mediaTyp
         let mediaType: 'video' | 'audio' | 'unknown' = 'unknown';
 
         if (isVideo) {
-          mediaType = 'video';
+          resolve( 'video');
         } else if (isAudio) {
-          mediaType = 'audio';
+          resolve('audio')
         } else {
           reject('File is neither audio nor video');
           return
         }
-
-        // Get the codec_name from the relevant stream
-        const codec = data.streams.find((stream) => stream.codec_type === mediaType)?.codec_name;
-
-        // Determine the MIME type and extension using mime-types library
-        let mimeType = 'application/octet-stream';
-        let extension = '';
-
-        if (codec) {
-          mimeType = mime.lookup(codec) || mimeType;
-          extension = mime.extension(mimeType) || '';
-        }
-
-        resolve({ mediaType, mimeType, extension });
       });
     } catch (error) {
       console.error('Error processing file:', error);
@@ -55,7 +41,10 @@ function convertBufferToStream(buffer: Buffer): Readable  {
   return readable;
 };
 
-export function getMediaDuration(filePath: string): Promise<number> {
+export function getMediaDuration(filePath: string | null): Promise<number> {
+  if (!filePath) {
+    return Promise.reject('No file path provided')
+  }
   return new Promise((resolve, reject) => {
     ffmpeg.ffprobe(filePath, (error, metadata) => {
       if (error) {

@@ -18,6 +18,16 @@ import {
 } from './videoFsPath'
 import { retry } from './async'
 
+export const findMediaFilePath = async (videoName: string, mediaType: 'audio' | 'video'): Promise<string | null> => {
+  const videoDir = getVideoDir(videoName)
+  const videoFiles = await fs.readdir(videoDir)
+  const videoFile = videoFiles.find((file) => file.startsWith(mediaType))
+  if (videoFile) {
+    return `${videoDir}/${videoFile}`
+  }
+  return null
+}
+
 const downloadImage = async (url: string, destinationPath: string) => {
   await retry(async () => {
     const response = await fetch(url, {

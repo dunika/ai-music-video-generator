@@ -638,7 +638,9 @@ function Page() {
     initialData: 0,
     queryKey: ['videoDuration', currentVideo?.name, videoDetail.videoType],
     queryFn: async () => {
-      return ky.get(`http://localhost:3000/api/videos/duration?videoName=${currentVideo?.name}&videoType=${videoDetail.videoType}`).json()
+      const data = await ky.get(`http://localhost:3000/api/videos/duration?videoName=${currentVideo?.name}`).json()
+      debugger
+      return data.durationInFrames
     },
   })
   const videoConfig: VideoConfig = {

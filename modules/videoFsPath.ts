@@ -10,8 +10,10 @@ export const getVideoFilePath = (videoName: string, extension: string = 'mov') =
   return getMediaFilePath(videoName, 'video', extension)
 }
 
+
+
 export const getAudioFilePath = (videoName: string, extension: string = 'mov') => {
-  return getMediaFilePath(videoName, 'video', extension)
+  return getMediaFilePath(videoName, 'audio', extension)
 }
 
 export const getCaptionsFilePath = (videoName: string) => `${getVideoDir(videoName)}/captions.json`

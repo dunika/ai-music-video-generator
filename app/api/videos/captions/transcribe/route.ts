@@ -8,7 +8,7 @@ import {
 } from '@/modules/videoFs'
 import deepgram from './deepgram'
 import { getCaptions } from './getCaptions'
-import { getFileBufferMediaInfo } from '@/modules/ffmpeg'
+import { getFileBufferMediaType } from '@/modules/ffmpeg'
 
 export async function POST(request: Request) {
   const formData = await request.formData()
@@ -17,13 +17,20 @@ export async function POST(request: Request) {
   const file = formData.get('file') as File
   const fileToTranscribe = formData.get('fileToTranscribe') as File
 
-
   await makeVideoDir(videoName)
 
   // Save original media file
   const fileBuffer = Buffer.from(await file.arrayBuffer())
-  const fileBufferMediaInto = await getFileBufferMediaInfo(fileBuffer)
-  await writeMediaBuffer(videoName, fileBuffer, fileBufferMediaInto.mediaType, fileBufferMediaInto.extension)
+  const mediaType = await getFileBufferMediaType(fileBuffer)
+
+  const extension = file.name.split('.').at(-1)
+  if (!extension) {
+    return Response.json({
+      error: 'Could not determine file extension',
+    })
+  }
+
+  await writeMediaBuffer(videoName, fileBuffer, mediaType, extension)
 
   // Transcribe audio 
   const fileBufferToTranscribe = Buffer.from(await fileToTranscribe.arrayBuffer())
